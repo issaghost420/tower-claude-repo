@@ -1,0 +1,193 @@
+# ~/.config/mcp/research.yml
+# Every research behavior lives here. Restart the service after editing.
+# Inspect the live values any time with the research_config MCP tool.
+
+defaults:
+  profile: standard
+  cache_ttl_hours: 168          # 1 week. Fetched pages reused across runs.
+  cache_path: ~/.cache/deepresearch/cache.sqlite
+  output_dir: ~/research/reports
+
+searx:
+  # Direct to the LAN service. Do NOT route through duckdns/Caddy -- you'd be
+  # doing TLS + reverse proxy round trips for a localhost call, and the limiter
+  # config that applies to the public route does not need to apply here.
+  url: http://localhost:8888/sear
+  timeout_s: 30
+
+# ---------------------------------------------------------------- shared base
+shared:
+  engines: [google, duckduckgo, bing, brave, startpage, mojeek, yandex,
+            marginalia, stract, wikipedia, arxiv, "google scholar", "google news"]
+  engines_per_query: 4
+  results_per_query: 10
+  max_pageno: 3
+  escalate_pageno_if_thin: true
+  thin_round_threshold: 3        # < 3 new sources on page 1 -> go to page 2
+  max_per_domain: 3
+  min_score_to_keep: 0.25
+
+  diversification:
+    strategy: facet              # facet | reformulate | adversarial | mixed
+    min_edit_distance: 0.4       # reject queries >60% similar to a prior one
+    require_negative_case: true
+    max_regen_attempts: 3
+
+  fetch:
+    concurrency: 8
+    timeout_s: 20
+    max_bytes: 3000000
+    min_content_chars: 400       # below this, extraction failed; drop the source
+    browser_fallback: true       # playwright, only on JS walls / thin extractions
+    user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+
+  scoring:                       # weights are normalized, they need not sum to 1
+    cross_engine_agreement: 0.30
+    domain_tier: 0.25
+    recency: 0.20
+    term_density: 0.15
+    content_length: 0.10
+    recency_halflife_days: 540
+    ignore_recency_for_tiers: [tier1]   # a 2011 arxiv paper isn't stale
+
+  sidechain:
+    enabled: true
+    triggers: [unknown_entity, unanswered_question]
+    max_sidechains: 3
+    max_depth: 1                 # sidechains cannot spawn sidechains
+    rounds: 1
+    queries: 2
+    sources: 5
+
+# -------------------------------------------------------------------- profiles
+profiles:
+  quick:
+    rounds: 1
+    queries_per_round: 3
+    total_sources: 8
+    max_pageno: 1
+    wall_clock_budget_s: 90
+    sidechain: { enabled: false }
+
+  standard:
+    rounds: 3
+    queries_per_round: 4
+    total_sources: 25
+    # Pinned to the sync tool (deep_research). MUST stay <= RESEARCH_SYNC_CEILING_S
+    # (default 300) — the server refuses to boot otherwise.
+    wall_clock_budget_s: 280
+
+  # Pinned to the async tool (deeper_research). wall_clock_budget_s: 0 means
+  # UNLIMITED — the run ends when rounds are exhausted or the gap check
+  # reports sufficiency, never on a timer.
+  deeper:
+    rounds: 10
+    queries_per_round: 5
+    engines_per_query: 5
+    total_sources: 100
+    max_per_domain: 5
+    wall_clock_budget_s: 0
+    diversification: { strategy: mixed }
+    sidechain: { max_sidechains: 8, rounds: 2, queries: 3, sources: 8 }
+
+  deep:
+    rounds: 6
+    queries_per_round: 5
+    engines_per_query: 5
+    total_sources: 60
+    max_per_domain: 4
+    wall_clock_budget_s: 1800
+    diversification: { strategy: mixed }
+    sidechain: { max_sidechains: 5, rounds: 1, queries: 3, sources: 8 }
+
+  technical:
+    rounds: 4
+    queries_per_round: 4
+    engines: [google, duckduckgo, brave, mojeek, marginalia, stract,
+              arxiv, "google scholar", github, stackexchange]
+    total_sources: 30
+    scoring: { recency: 0.30, recency_halflife_days: 270 }
+
+  adversarial:
+    rounds: 4
+    queries_per_round: 5
+    total_sources: 35
+    diversification: { strategy: adversarial, min_edit_distance: 0.5 }
+
+# ------------------------------------------------------------------- tiers
+# First match wins; blocked is checked first. Globs supported.
+domain_tiers:
+  blocked:
+    - pinterest.*
+    - "*.pinterest.com"
+    - quora.com
+    - answers.com
+    - ehow.com
+    - "*.blogspot.com"
+  tier1:
+    - arxiv.org
+    - "*.gov"
+    - "*.edu"
+    - nature.com
+    - science.org
+    - sciencedirect.com
+    - pubmed.ncbi.nlm.nih.gov
+    - ieee.org
+    - acm.org
+    - nist.gov
+    - rfc-editor.org
+    - wikipedia.org
+    - github.com
+    - kernel.org
+    - nixos.org
+  tier3:
+    - medium.com
+    - "*.medium.com"
+    - linkedin.com
+    - facebook.com
+    - "*.wordpress.com"
+
+# -------------------------------------------------------------- internal model
+synthesis:
+  endpoint: http://localhost:1234/v1
+  model: auto
+  api_key_env: RESEARCH_LLM_KEY
+  temperature: 0.2
+  max_tokens: 32768
+  planner_max_tokens: 2000
+  timeout_s: 300
+  prompt_dir: ~/tools/mcp-servers/deepresearch/prompts
+  templates:
+    planner: planner.j2
+    gap: gap.j2
+    synth: synth.j2
+
+# -------------------------------------------------------------------- output
+output:
+  sections: [answer, confidence, key_findings, contradictions, gaps, caveats, sources]
+  synthesis_char_budget: 90000    # total source text sent to the synthesis model
+
+  # --- context overflow protection ---
+  # Max tokens the synth PROMPT may occupy (source excerpts shrink to fit).
+  # Set this below your model's context window minus synthesis_max_tokens.
+  # e.g. 32K context model: 28000 prompt + 4096 output = 32096 (tight fit).
+  # e.g. 128K context model: you can raise this to 60000+.
+  synthesis_prompt_token_limit: 28000
+
+  # Max tokens the synthesis MODEL may generate. The report is structured
+  # JSON, not prose — 8K is generous. Setting this to 32768 (the old
+  # behavior) is what caused the model to loop on context overflow.
+  synthesis_max_tokens: 8192
+
+  epistemic_tags:
+    required: true
+    taxonomy: [verified, pattern_based_guess, theoretical, creative_riff]
+  claim_citation: mandatory
+  contradiction_flagging: true
+
+  # What the MCP tool returns to the calling model:
+  #   full              — everything including markdown (old behavior, huge payloads)
+  #   summary_plus_path — synthesis dict + report_path, no markdown blob
+  #   path_only         — just the path and a 500-char answer preview
+  return_mode: summary_plus_path
+

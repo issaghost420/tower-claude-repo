@@ -1,0 +1,46 @@
+{
+  "mcpServers": {
+    "local-files": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/tower",
+        "/etc/nixos",
+        "/etc/caddy",
+        "/var/log",
+        "/var/lib",
+        "/data",
+        "/hdd2",
+        "/990",
+        "/sata",
+        "/tmp",
+        "/mnt/titan",
+        "/mnt/dacrib"
+      ]
+    },
+    "agent-memory": {
+      "command": "npx",
+      "args": ["-y", "mcp-simple-memory", "serve"]
+    },
+    "web-search": {
+      "command": "npx",
+      "args": ["-y", "mcp-searxng@0.10.0"],
+      "env": {
+        "SEARXNG_URL": "https://dojos.duckdns.org/sear"
+      }
+    },
+    "shell": {
+      "command": "npx",
+      "args": ["-y", "mcp-shell-server"]
+    },
+    "browser": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"]
+    },
+    "git": {
+      "command": "npx",
+      "args": ["-y", "mcp-git"]
+    }
+  }
+}

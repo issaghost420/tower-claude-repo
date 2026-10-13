@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@modelcontextprotocol/server-filesystem": "^2026.7.10",
+    "@playwright/mcp": "^0.0.78",
+    "mcp-git": "^0.0.4",
+    "mcp-searxng": "^0.10.0",
+    "mcp-shell-server": "^1.0.1",
+    "mcp-simple-memory": "^0.4.0",
+    "sharp": "^0.35.3"
+  },
+  "type": "module"
+}

@@ -1,0 +1,27 @@
+[project]
+name = "deepresearch"
+version = "0.2.0"
+description = "Configurable multi-round research MCP server backed by SearXNG"
+requires-python = ">=3.11"
+dependencies = [
+  # server.py does `from fastmcp import FastMCP` — the standalone fastmcp
+  # package, NOT the mcp SDK. This was missing in v0.1 and is the reason the
+  # Nix-built closure failed while the hand-made venvs worked.
+  "fastmcp>=2.0",
+  "mcp>=1.2.0",
+  "httpx>=0.27",
+  "pyyaml>=6.0",
+  "jinja2>=3.1",
+  "trafilatura>=1.12",
+]
+
+[project.optional-dependencies]
+browser = ["playwright>=1.44"]
+
+[project.scripts]
+deepresearch-mcp = "deepresearch.server:main"
+deepresearch-cli = "deepresearch.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

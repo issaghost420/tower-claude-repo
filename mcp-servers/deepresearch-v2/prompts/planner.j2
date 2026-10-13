@@ -1,0 +1,17 @@
+Emit ONLY a JSON object. No preamble, no reasoning, no explanation.
+
+Research question: {{ query }}
+Round {{ round_no }} of {{ total_rounds }}. Generate {{ n_queries }} distinct search queries.
+
+{% if seen_queries %}Do not repeat these already-run queries:
+{% for q in seen_queries %}- {{ q }}
+{% endfor %}{% endif %}
+
+Rules:
+- Each query 3-10 words, keyword style, no full sentences
+- Materially different vocabulary between queries
+- One query must seek disconfirming evidence or failure cases
+- No boolean operators, no quotes
+
+Output format:
+{"rationale": "one sentence", "queries": ["...", "..."]}

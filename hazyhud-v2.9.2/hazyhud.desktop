@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=HazyHud
+Comment=System vitals HUD
+Exec=hazyhud
+Icon=hazyhud
+Categories=System;Monitor;
+Keywords=cpu;gpu;temperature;fans;monitor;

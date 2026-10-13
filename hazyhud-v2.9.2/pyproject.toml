@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hazyhud"
+version = "2.9.2"
+description = "System vitals HUD — CPU/GPU/RAM/cooling at a glance, Qt desktop + terminal TUI on one data layer"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "psutil>=6.0",
+    "PyYAML>=6.0",
+    "PySide6-Essentials>=6.7",
+]
+
+[project.optional-dependencies]
+tui = ["textual>=0.86"]
+
+[project.scripts]
+hazyhud = "hazyhud.__main__:main"
+hazyhud-tui = "hazyhud.tui.app:main"
+
+[tool.setuptools.packages.find]
+include = ["hazyhud*"]

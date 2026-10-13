@@ -268,7 +268,7 @@ _mcp_bridge_up() {
   curl -fsS --max-time 2 http://localhost:8808/health >/dev/null 2>&1 && return 0
   [[ -d ~/tools/llm-functions ]] || return 1
   echo "⏳ starting MCP bridge..." >&2
-  (cd ~/tools/llm-functions && argc mcp start >/dev/null 2>&1)
+  ~/tools/mcp-servers/aichat-mcp-start.sh >/dev/null 2>&1
 }
 
 # halp: aichat + web search + read-only file tools (role: ~/.config/aichat/roles/halp.md)

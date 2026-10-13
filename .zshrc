@@ -1,5 +1,6 @@
 export PATH="$HOME/.local/bin:$HOME/.npm-global/bin:$HOME/towerstack/scripts:$HOME/.lmstudio/bin:$PATH"
 export EDITOR="gram"
+export AICHAT_ENV_FILE="$HOME/.secrets/lms.env"   # aichat reads LMSTUDIO_API_KEY from here
 
 # ============================================================
 # History  (was: histSize = 10000, setOptions)
@@ -262,13 +263,24 @@ dcd() {
   cd "$prev"
 }
 
+# Start the llm-functions MCP bridge if it's down (it doesn't survive reboots)
+_mcp_bridge_up() {
+  curl -fsS --max-time 2 http://localhost:8808/health >/dev/null 2>&1 && return 0
+  [[ -d ~/tools/llm-functions ]] || return 1
+  echo "⏳ starting MCP bridge..." >&2
+  (cd ~/tools/llm-functions && argc mcp start >/dev/null 2>&1)
+}
+
+# halp: aichat + web search + read-only file tools (role: ~/.config/aichat/roles/halp.md)
 halp() {
   local context="Current directory: $PWD
 Recent commands:
 $(fc -ln -20)
 
 Question: $*"
-  echo "$context" | aichat 2>/dev/null | sed '/<think>/,/<\/think>/d; /<think>/,$d'
+  _mcp_bridge_up || echo "⚠️  MCP bridge not running, no tools this time" >&2
+  echo "$context" | LLM_MCP_SKIP_CONFIRM='web_search_searxng_web_search|web_search_web_url_read|local_files_read_file|local_files_read_multiple_files|local_files_list_directory|local_files_directory_tree|local_files_search_files|local_files_get_file_info|local_files_list_allowed_directories' \
+    aichat -r halp 2>/dev/null | sed '/<think>/,/<\/think>/d; /<think>/,$d'
 }
 
 halpdo() {

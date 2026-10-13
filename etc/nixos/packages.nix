@@ -60,6 +60,7 @@
     plasticity                                       # 3D Modeling software
 
     # Dev tools
+    argc                                             # Bash CLI framework, runs llm-functions (aichat tools + MCP bridge)
     bubblewrap                                       # Unprivileged chroot environment for security sandboxing
 #    diffotool   this <-- not the right thing
     esphome                                          # yaml to binary flashable code compiler
@@ -126,6 +127,7 @@
     w3m                                              # Text web browser with inline images
 
     # Network tools
+    curl                                             # HTTP client, llm-functions MCP bridge calls go through it
     dig                                              # DNS and query tool
     iperf3                                           # Network testing tool
     tcpdump                                          # Packet capture and network traffic analyzer 
@@ -208,7 +210,7 @@
     libxcb                                            # C library for X11
     qt6.qtwayland                                     # Qt6 Wayland platform plugin, enables native Wayland rendering for Qt6 apps
     usbutils                                          # lsusb and more usb utilities 
-    uv
+    uv                                                # Fast Python package/project manager (uvx runs Python MCP servers)
     visidata                                          # json viewer spreadsheet style
     wireguard-tools                                   # Wireguard VPN manager/configure-r
     wl-clipboard                                      # Wayland clipboard (wl-copy)

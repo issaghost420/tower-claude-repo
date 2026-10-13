@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Loop guard for llm-functions MCP tools. aichat has no limit on tool-call rounds,
 # so small models can call the same tool forever and blow the context.
-# aichat-mcp-start.sh points every llm-functions/bin/<tool> symlink here.
+# halp-mcp-start points every llm-functions/bin/<mcp tool> symlink here.
 #
 # Only active when LLM_GUARD_FILE is set (halp sets one per run):
 #   - same tool + same arguments twice  -> returns "already called, answer now" instead
@@ -17,7 +17,7 @@ reply() {
   # Model ignored 3 STOPs already -> non-zero exit makes aichat abort the whole run
   echo x >> "$LLM_GUARD_FILE.stops"
   if (( $(wc -l < "$LLM_GUARD_FILE.stops") > 3 )); then
-    echo "llm-tool-guard: model kept calling tools after being told to stop, aborting" >&2
+    echo "halp tool-guard: model kept calling tools after being told to stop, aborting" >&2
     exit 1
   fi
   # aichat reads tool output from $LLM_OUTPUT

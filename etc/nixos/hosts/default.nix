@@ -40,6 +40,7 @@
     ../tools/pi.nix
     ../tools/stt.nix
     ../tools/wheres.nix
+    ../tools/halp.nix
     ../hardware-configuration.nix
   ];
 

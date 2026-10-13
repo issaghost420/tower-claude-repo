@@ -279,8 +279,15 @@ $(fc -ln -20)
 
 Question: $*"
   _mcp_bridge_up || echo "⚠️  MCP bridge not running, no tools this time" >&2
-  echo "$context" | LLM_MCP_SKIP_CONFIRM='web_search_searxng_web_search|web_search_web_url_read|local_files_read_file|local_files_read_multiple_files|local_files_list_directory|local_files_directory_tree|local_files_search_files|local_files_get_file_info|local_files_list_allowed_directories|local_files_create_file' \
-    aichat -r halp 2>/dev/null | sed '/<think>/,/<\/think>/d; /<think>/,$d'
+  # Loop guard (mcp-servers/llm-tool-guard.sh): no repeat calls, max 12 tools, 3 min hard stop
+  local guard; guard=$(mktemp -t halp-guard.XXXXXX)
+  echo "$context" | LLM_GUARD_FILE="$guard" LLM_GUARD_MAX=12 LLM_MCP_SKIP_CONFIRM='web_search_searxng_web_search|web_search_web_url_read|local_files_read_file|local_files_read_multiple_files|local_files_list_directory|local_files_directory_tree|local_files_search_files|local_files_get_file_info|local_files_list_allowed_directories|local_files_create_file' \
+    timeout 180 aichat -r halp 2>/dev/null | sed '/<think>/,/<\/think>/d; /<think>/,$d'
+  local rc=${pipestatus[2]}
+  rm -f "$guard" "$guard.stops"
+  (( rc == 124 )) && echo "⚠️  halp: timed out after 3 min" >&2
+  (( rc != 0 && rc != 124 )) && echo "⚠️  halp: aichat exited $rc (tool loop abort or error, rerun without 2>/dev/null to see it)" >&2
+  return $rc
 }
 
 halpdo() {

@@ -89,7 +89,7 @@ clients:
     api_base: http://localhost:1234/v1
     models:
       - name: local-model
-        max_input_tokens: 1000000
+        max_input_tokens: 72000      # match LM Studio's context length so aichat errors early instead of LM Studio choking
         supports_function_calling: true
 
   # See https://docs.anthropic.com/claude/reference/getting-started-with-the-api

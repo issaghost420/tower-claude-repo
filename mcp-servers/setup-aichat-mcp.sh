@@ -26,8 +26,8 @@ else
   echo "error: $AICHAT_FUNCTIONS_LINK exists and isn't a symlink, move it and re-run"; exit 1
 fi
 
+"$HOME/tools/mcp-servers/aichat-mcp-start.sh"
 cd "$LLM_FUNCTIONS_DIR"
-argc mcp start
 echo
 echo "Tools aichat can see:"
 jq -r '.[].name' functions.json

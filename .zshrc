@@ -263,33 +263,7 @@ dcd() {
   cd "$prev"
 }
 
-# Start the llm-functions MCP bridge if it's down (it doesn't survive reboots)
-_mcp_bridge_up() {
-  curl -fsS --max-time 2 http://localhost:8808/health >/dev/null 2>&1 && return 0
-  [[ -d ~/tools/llm-functions ]] || return 1
-  echo "⏳ starting MCP bridge..." >&2
-  ~/tools/mcp-servers/aichat-mcp-start.sh >/dev/null 2>&1
-}
-
-# halp: aichat + web search + read-only file tools + create-new-file (no overwrite) (role: ~/.config/aichat/roles/halp.md)
-halp() {
-  local context="Current directory: $PWD
-Recent commands:
-$(fc -ln -20)
-
-Question: $*"
-  _mcp_bridge_up || echo "⚠️  MCP bridge not running, no tools this time" >&2
-  # Loop guard (mcp-servers/llm-tool-guard.sh): no repeat calls, max 12 tools, 3 min hard stop
-  local guard; guard=$(mktemp -t halp-guard.XXXXXX)
-  local errout=/dev/null; [[ -n $HALP_DEBUG ]] && errout=/dev/stderr
-  echo "$context" | LLM_GUARD_FILE="$guard" LLM_GUARD_MAX=12 LLM_MCP_SKIP_CONFIRM='web_search_searxng_web_search|web_search_web_url_read|local_files_read_file|local_files_read_multiple_files|local_files_list_directory|local_files_directory_tree|local_files_search_files|local_files_get_file_info|local_files_list_allowed_directories|local_files_create_file' \
-    timeout 180 aichat -r halp 2>"$errout" | sed '/<think>/,/<\/think>/d; /<think>/,$d'
-  local rc=${pipestatus[2]}
-  command rm -f "$guard" "$guard.stops"   # bypass the trash-put rm wrapper
-  (( rc == 124 )) && echo "⚠️  halp: timed out after 3 min" >&2
-  (( rc != 0 && rc != 124 )) && echo "⚠️  halp: aichat exited $rc (tool loop abort or error, rerun with HALP_DEBUG=1 halp ... to see it)" >&2
-  return $rc
-}
+# halp now lives in /etc/nixos/tools/halp.nix (halp --help)
 
 halpdo() {
   local context="Current directory: $PWD

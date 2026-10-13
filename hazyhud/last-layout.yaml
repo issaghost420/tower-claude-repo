@@ -1,0 +1,47 @@
+# hazyhud free-mode layout — autosaved on every tile move/resize.
+# Delete this file (or press 'o') to re-seed tiles from the preset.
+# Honored at launch when launch.restore_last_layout is true.
+tiles:
+  aqua:
+  - 290
+  - 171
+  - 145
+  - 169
+  cpu:
+  - 0
+  - 0
+  - 294
+  - 153
+  fans:
+  - 0
+  - 139
+  - 290
+  - 201
+  gpu0:
+  - 660
+  - 0
+  - 300
+  - 172
+  gpu1:
+  - 660
+  - 170
+  - 299
+  - 170
+  mode_switcher:
+  - 161
+  - 139
+  - 179
+  - 186
+  power_avg:
+  - 438
+  - 172
+  - 222
+  - 160
+  system:
+  - 293
+  - 0
+  - 367
+  - 171
+window:
+- 960
+- 340

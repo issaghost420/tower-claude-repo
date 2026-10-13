@@ -1,0 +1,240 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# HazyHud config — both the Qt HUD and the TUI read from this same file.
+#
+# Save it, and the running app picks up your changes on the next tick (~1s).
+# No restart needed, ever. Just save and watch it update.
+#
+# If you leave something out, the built-in default kicks in. Delete whole
+# sections if you want — nothing breaks. Numbers get clamped to sane ranges
+# so a fat-finger makes things ugly at worst, never crashes anything.
+# ═══════════════════════════════════════════════════════════════════════════
+
+poll_interval_ms: 750 # sensor sampling rate in ms (250 minimum)
+
+# ── CoolerControl ───────────────────────────────────────────────────────────
+# Fan speeds, coolant temps, flow rates, and cooling mode switching all come
+# from the CoolerControl daemon over its REST API.
+coolercontrol:
+  host: localhost
+  port: 11987
+  # Newer CC versions turn on Access Protection by default. Two ways to auth:
+  #   token    — best option. Go to CC UI -> Access Protection -> create one.
+  #              Read-only is enough to monitor; mode switching needs WRITE.
+  #   password — the daemon admin password. Works but token is cleaner.
+  # If you set either of these, chmod 600 this file so nobody else reads it.
+  token: cc_b4c1d6ea07634c88a1ad6732b173f86f
+  password: null
+  timeout_s: 2.0
+  aqua_device_match:
+    octo # substring match (case-insensitive) for the CC
+    # device with your loop temps. "" = show all
+  fan_device_match: "" # same idea for the fan box. "" = all fan channels
+
+#D# ── Layout ──────────────────────────────────────────────────────────────────
+#o# Everything is a grid of boxes — works like a spreadsheet.
+#   row/col      = grid coordinates (0-indexed, top-left origin)
+#N#   colspan/rowspan = stretch a box across multiple cells
+#o#
+#t# Available boxes:
+#   cpu  gpu0  gpu1  system  aqua  fans  power_avg  mode_switcher
+#M# Shortcuts:  ram->system  coolant->aqua  power->power_avg  modes->mode_switcher
+#o#
+#d# Presets are named layout bundles. I included four:
+#i#   full     — 3 columns, everything visible (default)
+#f#   compact  — 2 columns, stacked for narrower windows
+#y#   cooling  — just the loop: coolant, power, fans, mode switcher
+#   minimal  — CPU + GPUs on top, system + power below
+#T# Hit  p  in the app to cycle through them live.
+#h#
+#i#  Per-box sizing:
+#s#   min_width / min_height — pixel floor (0 = fit to content)
+#   max_width / max_height — hard ceiling, box won't grow past this
+#   hstretch / vstretch    — how greedy a box is with leftover space
+#S#                            (2 = takes twice the slack of 1)
+#e#
+#c# Squatty / tile mode (like Home Assistant dashboards):
+#t#   fill: false         — boxes stay content-sized, empty space collects
+#i#                         at the bottom-right instead of stretching things
+#o#   spread_rows: false  — metric rows pack tight at the top of each box
+#n#   box_padding: { x: 10, y: 6 }  and  row_spacing: 0  tighten it up more
+layout:
+  preset: minimal
+  mode:
+    free # grid | free
+    # grid = the spreadsheet layout below (rows/cols).
+    # free = a drag canvas: tiles go anywhere in the
+    # window, drag the TITLE BAR to move, drag any EDGE
+    # or CORNER to resize, and they stay put. The window
+    # sets the borders; you set the table inside it.
+    # Presets/widgets/columns below are ignored in free
+    # mode — tile positions save per-tile automatically.
+    # Press 'o' (oops) to reset tiles if they get messy.
+  # ── free-mode snapping (only used when mode: free) ──
+  snap_to_edges:
+    true # tiles magnet to the window edges and to each
+    # other's edges so they click together cleanly. A
+    # wide tile clears the tallest neighbor it spans, so
+    # staggered layouts just work. Weak/forgiving — it
+    # never fights you.
+  snap_to_grid: false # also quantize moves/resizes to a pixel grid
+  grid_size: 50 # px cell for snap_to_grid
+  allow_overlap:
+    true # false = a tile that would cover another slides to
+    # the nearest free spot on drop (no reflow, no
+    # whack-a-mole). true = tiles can overlap freely.
+  margin: 10 # px, window edge to grid           (0–60)
+  spacing: 10 # px, gap between boxes             (0–40)
+  box_padding: { x: 14, y: 10 } # px, inside each box     (0–40)
+  row_spacing: 2 # px, between metric rows in a box  (0–20)
+  fill: true # false = content-sized tiles
+  spread_rows: false #false = rows pack to the top
+  allow_squash:
+    true # true = boxes can shrink BELOW their content size.
+    # This is the "let me get squatty" switch — with it
+    # on, the grip and config can clip/overlap a box's own
+    # labels, like resizing any normal window. With it off
+    # (default), a box never goes smaller than its content.
+  min_box:
+    { width: 120, height: 80 } # grip resize floor in px. Turn these
+    # down (with allow_squash: true) to crush boxes tiny —
+    # the grip itself won't go below ~24px so you can still
+    # grab it, but config min_width/min_height can go lower.
+  snap_resize:
+    true # true = when you let go of a grip resize, snap the
+    # box's height to the shortest box in its grid row if
+    # it's within ~24px. Size one box, then drag the others
+    # in the row close and they'll line up to it.
+  draggable:
+    true # grab a box's title bar and drop it on another to
+    # swap them. Grab the bottom-right corner to resize.
+    # Both persist across restarts (stored separately,
+    # so your comments in this file are safe). To lock
+    # in an arrangement, put it in widgets: below —
+    # explicit values here take back control from drags.
+
+  # Override individual boxes from the preset. You only need to list the
+  # ones you're changing. Set a box to null to hide it.
+  # widgets:
+  #   fans:  { row: 0, col: 0, colspan: 2 }
+  #   cpu:   { min_width: 520 }
+  #   gpu1:  null
+  # columns: 4            # force column count (otherwise uses the preset's)
+
+# ── Custom presets ──────────────────────────────────────────────────────────
+# Same shape as the built-ins. Set layout.preset to your name to use it.
+# presets:
+#   mypreset:
+#     columns: 2
+#     widgets:
+#       gpu0:          { row: 0, col: 0 }
+#       gpu1:          { row: 0, col: 1 }
+#       fans:          { row: 1, col: 0, colspan: 1 }
+#       mode_switcher: { row: 2, col: 0, colspan: 2 }
+
+# ── Window ──────────────────────────────────────────────────────────────────
+window:
+  width: 0 # 0 = auto-size to content (Qt frontend only)
+  height: 0
+  remember_geometry: true # remembers position + size between sessions
+  title: hazyhud
+
+# ── Kiosk mode ──────────────────────────────────────────────────────────────
+# For a dedicated display — frameless, always on top, no taskbar entry.
+# hazyhud --kiosk forces this on regardless of `enabled`.
+# KDE users: Window Rules -> match class "hazyhud" -> Desktop: All Desktops
+# so it follows you across virtual desktops.
+kiosk:
+  enabled: false
+  screen: 0 # monitor index (0 = primary)
+  frameless: true
+  always_on_top: true
+  skip_taskbar: true
+
+# ── Fonts ───────────────────────────────────────────────────────────────────
+# The Qt HUD respects all of this. The TUI ignores font settings — your
+# terminal emulator handles that.
+fonts:
+  family: Space Grotesk
+  fallbacks: [Cascadia Mono, DejaVu Sans Mono, Noto Sans Mono]
+  scale: 1.0 # master text size dial (0.6–2.0)
+  classes: # individual sizes in px at scale 1.0 (clamped 6–72)
+    title: { size: 24, bold: true, italic: false }
+    header: { size: 20, bold: true, italic: false }
+    label: { size: 22, bold: true, italic: false }
+    value: { size: 24, bold: true, italic: false }
+    small: { size: 20, bold: true, italic: false }
+    help: { size: 12, bold: false, italic: false }
+
+# ── Colors ──────────────────────────────────────────────────────────────────
+colors:
+  background: "#202326"
+  box_fill: "#0b1220" # same as background = flat look, change for raised
+  border: "#38bdf8"
+  text_normal: "#4ade80" # healthy values
+  text_warn: "#facc15" # past warn threshold
+  text_crit: "#f87171" # past crit threshold
+  text_dim: "#818cf8" # mins, secondary info
+  text_label: "#2dd4bf" # titles, labels, headers
+  text_max: "#fbbf24" # maxes
+  bar_track: "#16233b" # empty portion of the bars
+  help_text: "#64748b"
+  help_key: "#fbbf24"
+
+# ── Bars ────────────────────────────────────────────────────────────────────
+# Each box gets a thin gradient bar — a quick visual indicator, not a chart.
+# The bar length shows the value; the bar COLOR shows what zone it's in
+# (blue = cold/idle, green = nominal, yellow = warm, red = hot).
+bars:
+  enabled: true
+  height: 4 # px (2–16)
+  position: bottom # top | bottom
+  sources: # which metric drives each box's bar
+    cpu: cpu_temp #   pick any key from `ranges` below
+    gpu: gpu_power #   default for all gpuN boxes
+    gpu0: gpu_power #   per-GPU override
+    gpu1: gpu_power
+    system: ram_percent
+    aqua: water_temp
+    power_avg: total_power
+    fans: duty_avg # average duty across all visible fan channels
+    mode_switcher: none # "none" disables the bar for that box
+  ranges: # [min, max] = what maps to [empty bar, full bar]
+    cpu_temp: [20, 100]
+    gpu_temp: [20, 90]
+    cpu_load: [0, 100]
+    gpu_load: [0, 100]
+    cpu_power: [0, 200]
+    gpu_power: [0, 625]
+    water_temp: [20, 50]
+    ram_percent: [0, 100]
+    duty_avg: [0, 100]
+    total_power: [0, 1200]
+  gradient: # color stops, low to high — add or remove freely
+    - { at: 0.0, color: "#38bdf8" } # blue
+    - { at: 0.4, color: "#4ade80" } # green
+    - { at: 0.7, color: "#facc15" } # yellow
+    - { at: 0.9, color: "#f87171" } # red
+
+# ── Help bar ────────────────────────────────────────────────────────────────
+help_bar:
+  visible: true # h key toggles it
+  position: bottom-center
+  # options: bottom-left | bottom-center | bottom-right
+  #          top-left    | top-center    | top-right
+  #          left | right  (vertical strip on the window edge)
+
+# ── Editor ──────────────────────────────────────────────────────────────────
+# Press e to open this file. Falls back to $VISUAL, then $EDITOR, then xdg-open.
+# For terminal editors, wrap them: editor: "kitty nvim"
+editor: micro
+
+# ── Thresholds ──────────────────────────────────────────────────────────────
+# When a value crosses warn or crit, its text color changes and the bar
+# gradient reflects it. Tune these to match your hardware.
+thresholds:
+  cpu_temp: { warn: 70, crit: 85 }
+  gpu_temp: { warn: 75, crit: 83 }
+  cpu_power: { warn: 105, crit: 142 }
+  gpu_power: { warn: 400, crit: 500 }
+  water_temp: { warn: 42, crit: 48 }
+  ram_percent: { warn: 75, crit: 90 }

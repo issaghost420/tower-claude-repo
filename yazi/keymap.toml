@@ -1,0 +1,137 @@
+[[mgr.prepend_keymap]]
+desc = "Extract (choose method)"
+on = ["e"]
+run = "open --interactive"
+
+[[mgr.prepend_keymap]]
+desc = "Extract here (quick)"
+on = ["E"]
+run = """
+shell '/etc/profiles/per-user/tower/bin/unar "%h" -o "$(dirname "%h")"' --confirm
+"""
+
+[[mgr.prepend_keymap]]
+desc = "Compress to .zip"
+on = ["C", "z"]
+run = """
+shell 'zip -r "$(basename "%h").zip" "$@"' --confirm
+"""
+
+[[mgr.prepend_keymap]]
+desc = "Compress to .tar.gz"
+on = ["C", "t"]
+run = """
+shell 'tar czf "$(basename "%h").tar.gz" "$@"' --confirm
+"""
+
+[[mgr.prepend_keymap]]
+desc = "Compress to .7z"
+on = ["C", "7"]
+run = """
+shell '7z a "$(basename "%h").7z" "$@"' --confirm
+"""
+
+[[mgr.prepend_keymap]]
+desc = "Run shell cmd (blocking)"
+on = ["!"]
+run = "shell --block --confirm"
+
+[[mgr.prepend_keymap]]
+desc = "Run shell cmd (bg)"
+on = ["@"]
+run = "shell --confirm"
+
+[[mgr.prepend_keymap]]
+desc = "Sort by size (largest first)"
+on = ["s", "s"]
+run = "sort size --reverse"
+
+[[mgr.prepend_keymap]]
+desc = "Sort by modified (newest first)"
+on = ["s", "m"]
+run = "sort modified --reverse"
+
+[[mgr.prepend_keymap]]
+desc = "Terminal here"
+on = ["T"]
+run = """shell '$TERMINAL --working-directory "$PWD"' --confirm"""
+
+[[mgr.prepend_keymap]]
+desc = "Symlink (relative)"
+on = ["l", "s"]
+run = "link --relative"
+
+[[mgr.prepend_keymap]]
+desc = "Symlink (absolute)"
+on = ["l", "a"]
+run = "link --absolute"
+
+[[mgr.prepend_keymap]]
+desc = "Enter dir or open file"
+on = ["<Enter>"]
+run = "plugin smart-enter"
+
+[[mgr.prepend_keymap]]
+desc = "Bulk rename"
+on = ["b", "r"]
+run = "bulk_rename"
+
+[[mgr.prepend_keymap]]
+desc = "Find (smart)"
+on = ["/"]
+run = "find --smart"
+
+[[mgr.prepend_keymap]]
+desc = "Fuzzy grep"
+on = ["f", "g"]
+run = """shell 'rg --files | fzf --preview "bat --color=always {}" | xargs -r yazi' --confirm"""
+
+[[mgr.prepend_keymap]]
+desc = "Go home"
+on = ["g", "h"]
+run = "cd ~"
+
+[[mgr.prepend_keymap]]
+desc = "Go .config"
+on = ["g", "c"]
+run = "cd ~/.config"
+
+[[mgr.prepend_keymap]]
+desc = "Go Downloads"
+on = ["g", "d"]
+run = "cd ~/Downloads"
+
+[[mgr.prepend_keymap]]
+desc = "Go /tmp"
+on = ["g", "t"]
+run = "cd /tmp"
+
+[[mgr.prepend_keymap]]
+desc = "Go /mnt"
+on = ["g", "m"]
+run = "cd /mnt"
+
+[[mgr.prepend_keymap]]
+desc = "Go NixOS config"
+on = ["g", "n"]
+run = "cd /etc/nixos"
+
+[[mgr.prepend_keymap]]
+desc = "chmod 644"
+on = ["c", "w"]
+run = """shell 'chmod 644 "$@"' --confirm"""
+
+[[mgr.prepend_keymap]]
+desc = "Chmod (interactive)"
+on = ["c", "m"]
+run = "plugin chmod"
+
+[[mgr.prepend_keymap]]
+desc = "Toggle hidden"
+on = ["."]
+run = "hidden toggle"
+
+[[mgr.prepend_keymap]]
+desc = "Drag & drop"
+on = ["d", "r"]
+run = """shell 'ripdrag -x "$@"' --confirm"""

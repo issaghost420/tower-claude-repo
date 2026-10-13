@@ -1,0 +1,380 @@
+// Gram keymap
+//
+// For information on binding keys, see the Gram
+// documentation: gram://docs/key-bindings
+//
+// To see the default key bindings run `gram: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      // "shift shift": "file_finder::Toggle"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      // "j k": "vim::NormalBefore"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-shift-g": "editor::BlameHover"
+    }
+  },
+  {
+    "context": "KeymapEditor",
+    "bindings": {
+      "ctrl-alt-shift-k": "keymap_editor::OpenCreateKeybindingModal"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-k": "editor::DeleteLine"
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "alt-shift-w": "terminal::Clear"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-alt-l": "lsp::OpenLanguageServerConfig"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "alt-shift-r": [
+        "task::Rerun",
+        {
+          "reevaluate_context": false
+        }
+      ]
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "ctrl-shift-r": "terminal::RerunTask"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-alt-s": null
+    }
+  },
+  {
+  	"context": "Workspace",
+  	"bindings": {
+  	  "ctrl-v": "editor::Paste"
+  	}
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-shift-u": "editor::Format"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-super-l": "language_selector::Toggle"
+    }
+  },
+  {
+    "bindings": {
+      "ctrl-super-8": "editor::SelectUpByLines"
+    }
+  },
+  {
+    "bindings": {
+      "ctrl-super-2": "editor::SelectDownByLines"
+    }
+  },
+  {
+    "bindings": {
+      "alt-|": "editor::SplitSelectionIntoLines"
+    }
+  },
+  {
+    "context": "vim_mode == replace",
+    "unbind": {
+      "ctrl-shift-v": "editor::Paste"
+    }
+  },
+  {
+    "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
+    "unbind": {
+      "space p": "editor::Paste"
+    }
+  },
+  {
+    "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
+    "unbind": {
+      "shift-r": "editor::Paste"
+    }
+  },
+  {
+    "context": "vim_mode == insert",
+    "unbind": {
+      "ctrl-shift-v": "editor::Paste"
+    }
+  },
+  {
+    "context": "Editor",
+    "unbind": {
+      "ctrl-v": "editor::Paste"
+    }
+  },
+  {
+    "context": "Editor",
+    "unbind": {
+      "shift-insert": "editor::Paste"
+    }
+  },
+  {
+    "context": "(vim_mode == normal || vim_mode == helix_normal) && !menu",
+    "unbind": {
+      "shift-p": [
+        "vim::Paste",
+        {
+          "before": true
+        }
+      ]
+    }
+  },
+  {
+    "context": "(vim_mode == normal || vim_mode == helix_normal) && !menu",
+    "unbind": {
+      "p": "vim::Paste"
+    }
+  },
+  {
+    "context": "vim_mode == helix_select",
+    "unbind": {
+      "p": "vim::Paste"
+    }
+  },
+  {
+    "context": "vim_mode == visual",
+    "unbind": {
+      "g shift-r": [
+        "vim::Paste",
+        {
+          "preserve_clipboard": true
+        }
+      ]
+    }
+  },
+  {
+    "context": "vim_mode == visual",
+    "unbind": {
+      "shift-p": [
+        "vim::Paste",
+        {
+          "preserve_clipboard": true
+        }
+      ]
+    }
+  },
+  {
+    "context": "Terminal",
+    "unbind": {
+      "shift-insert": "terminal::Paste"
+    }
+  },
+  {
+    "context": "Terminal",
+    "unbind": {
+      "paste": "terminal::Paste"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-v": "editor::Paste"
+    }
+  },
+  {
+    "context": "Editor",
+    "unbind": {
+      "paste": "editor::Paste"
+    }
+  },
+  {
+    "context": "!Editor && !Terminal",
+    "bindings": {
+      "ctrl-{": "workspace::ActivatePaneLeft"
+    }
+  },
+  {
+    "context": "!Editor && !Terminal",
+    "unbind": {
+      "space w h": "workspace::ActivatePaneLeft"
+    }
+  },
+  {
+    "context": "(VimControl && !menu) || (!Editor && !Terminal)",
+    "bindings": {
+      "ctrl-shift-left": "workspace::ActivatePaneLeft"
+    }
+  },
+  {
+    "context": "(VimControl && !menu) || (!Editor && !Terminal)",
+    "unbind": {
+      "ctrl-w h": "workspace::ActivatePaneLeft"
+    }
+  },
+  {
+    "context": "(VimControl && !menu) || (!Editor && !Terminal)",
+    "unbind": {
+      "ctrl-w ctrl-h": "workspace::ActivatePaneLeft"
+    }
+  },
+  {
+    "context": "(VimControl && !menu) || (!Editor && !Terminal)",
+    "unbind": {
+      "ctrl-w left": "workspace::ActivatePaneLeft"
+    }
+  },
+  {
+    "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
+    "unbind": {
+      "space w h": "workspace::ActivatePaneLeft"
+    }
+  },
+  {
+    "context": "Workspace",
+    "unbind": {
+      "ctrl-k ctrl-left": "workspace::ActivatePaneLeft"
+    }
+  },
+  {
+    "context": "Editor",
+    "unbind": {
+      "ctrl-insert": "editor::Copy"
+    }
+  },
+  {
+    "context": "Terminal",
+    "unbind": {
+      "ctrl-insert": "terminal::Copy"
+    }
+  },
+  {
+    "context": "KeymapEditor",
+    "bindings": {
+      "ctrl-w": "search::FocusSearch"
+    }
+  },
+  {
+    "context": "KeymapEditor",
+    "unbind": {
+      "ctrl-f": "search::FocusSearch"
+    }
+  },
+  {
+    "context": "Editor",
+    "unbind": {
+      "shift-delete": "editor::Cut"
+    }
+  },
+  {
+    "context": "SettingsWindow",
+    "unbind": {
+      "ctrl-w": "workspace::CloseWindow"
+    }
+  },
+  {
+    "context": "SkillCreator > Editor",
+    "unbind": {
+      "ctrl-w": "workspace::CloseWindow"
+    }
+  },
+  {
+    "context": "SkillCreator",
+    "unbind": {
+      "ctrl-w": "workspace::CloseWindow"
+    }
+  },
+  {
+    "context": "SettingsWindow",
+    "unbind": {
+      "escape": "workspace::CloseWindow"
+    }
+  },
+  {
+    "context": "KeymapEditor",
+    "unbind": {
+      "ctrl-k": "keymap_editor::OpenCreateKeybindingModal"
+    }
+  },
+  {
+    "context": "FileFinder || FileFinder > Picker > Editor || FileFinder > Picker > menu",
+    "unbind": {
+      "ctrl-k": "pane::SplitUp"
+    }
+  },
+  {
+    "context": "FileFinder || FileFinder > Picker > Editor || FileFinder > Picker > menu",
+    "unbind": {
+      "ctrl-k": "pane::SplitUp"
+    }
+  },
+  {
+    "context": "RecentProjects || RecentProjects > Picker > Editor",
+    "unbind": {
+      "ctrl-k": "recent_projects::ToggleActionsMenu"
+    }
+  },
+  {
+    "context": "FileFinder || FileFinder > Picker > Editor || FileFinder > Picker > menu",
+    "unbind": {
+      "ctrl-k": "pane::SplitUp"
+    }
+  },
+  {
+    "context": "FileFinder || FileFinder > Picker > Editor || FileFinder > Picker > menu",
+    "bindings": {
+      "ctrl-super-8": "pane::SplitUp"
+    }
+  },
+  {
+    "context": "FileFinder || FileFinder > Picker > Editor || FileFinder > Picker > menu",
+    "unbind": {
+      "ctrl-k": "pane::SplitUp"
+    }
+  },
+  {
+    "context": "FileFinder || FileFinder > Picker > Editor || FileFinder > Picker > menu",
+    "bindings": {
+      "ctrl-alt-8": "pane::SplitUp"
+    }
+  },
+  {
+    "context": "FileFinder || FileFinder > Picker > Editor || FileFinder > Picker > menu",
+    "unbind": {
+      "ctrl-k": "pane::SplitUp"
+    }
+  },
+  {
+    "context": "FileFinder || FileFinder > Picker > Editor || FileFinder > Picker > menu",
+    "unbind": {
+      "ctrl-k": "pane::SplitUp"
+    }
+  },
+  {
+    "context": "RecentProjects || RecentProjects > Picker > Editor",
+    "unbind": {
+      "ctrl-k": "recent_projects::ToggleActionsMenu"
+    }
+  }
+]

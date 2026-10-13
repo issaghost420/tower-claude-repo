@@ -1,0 +1,335 @@
+[columns]
+ctime = 4
+name = 1
+size = 3
+
+[input]
+cursor_blink = true
+
+[mgr]
+linemode = "size"
+ratio = [1, 4, 5]
+show_hidden = true
+show_symlink = true
+sort_by = "alphabetical"
+sort_dir_first = true
+sort_reverse = false
+sort_sensitive = false
+
+[[open.rules]]
+mime = "inode/directory"
+use = "directory"
+
+[[open.rules]]
+mime = "application/x-sqlite3"
+use = "database"
+
+[[open.rules]]
+mime = "application/vnd.sqlite3"
+use = "database"
+
+[[open.rules]]
+mime = "application/x-dbf"
+use = "database"
+
+[[open.rules]]
+mime = "application/x-dbase"
+use = "database"
+
+[[open.rules]]
+mime = "application/x-msaccess"
+use = "database"
+
+[[open.rules]]
+mime = "application/vnd.ms-access"
+use = "database"
+
+[[open.rules]]
+mime = "application/x-hdf"
+use = "database"
+
+[[open.rules]]
+mime = "application/x-hdf5"
+use = "database"
+
+[[open.rules]]
+url = "*.db"
+use = "database"
+
+[[open.rules]]
+url = "*.sqlite"
+use = "database"
+
+[[open.rules]]
+url = "*.sqlite3"
+use = "database"
+
+[[open.rules]]
+url = "*.sdb"
+use = "database"
+
+[[open.rules]]
+url = "*.mdb"
+use = "database"
+
+[[open.rules]]
+url = "*.accdb"
+use = "database"
+
+[[open.rules]]
+url = "*.dbf"
+use = "database"
+
+[[open.rules]]
+url = "*.duckdb"
+use = "database"
+
+[[open.rules]]
+url = "*.parquet"
+use = "database"
+
+[[open.rules]]
+url = "*.arrow"
+use = "database"
+
+[[open.rules]]
+url = "*.feather"
+use = "database"
+
+[[open.rules]]
+mime = "text/*"
+use = "edit"
+
+[[open.rules]]
+mime = "application/json"
+use = "json"
+
+[[open.rules]]
+mime = "application/x-ndjson"
+use = "json"
+
+[[open.rules]]
+mime = "application/xml"
+use = "edit"
+
+[[open.rules]]
+mime = "application/x-yaml"
+use = "edit"
+
+[[open.rules]]
+mime = "application/toml"
+use = "edit"
+
+[[open.rules]]
+mime = "application/x-shellscript"
+use = "edit"
+
+[[open.rules]]
+mime = "application/javascript"
+use = "edit"
+
+[[open.rules]]
+mime = "application/typescript"
+use = "edit"
+
+[[open.rules]]
+mime = "application/x-python"
+use = "edit"
+
+[[open.rules]]
+mime = "application/x-ruby"
+use = "edit"
+
+[[open.rules]]
+mime = "image/*"
+use = "image"
+
+[[open.rules]]
+mime = "video/*"
+use = "video"
+
+[[open.rules]]
+mime = "audio/*"
+use = "audio"
+
+[[open.rules]]
+mime = "application/pdf"
+use = "pdf"
+
+[[open.rules]]
+mime = "application/zip"
+use = "archive"
+
+[[open.rules]]
+mime = "application/gzip"
+use = "archive"
+
+[[open.rules]]
+mime = "application/x-tar"
+use = "archive"
+
+[[open.rules]]
+mime = "application/x-bzip2"
+use = "archive"
+
+[[open.rules]]
+mime = "application/x-xz"
+use = "archive"
+
+[[open.rules]]
+mime = "application/x-zstd"
+use = "archive"
+
+[[open.rules]]
+mime = "application/x-7z-compressed"
+use = "archive"
+
+[[open.rules]]
+mime = "application/x-rar"
+use = "archive"
+
+[[open.rules]]
+mime = "application/x-rar-compressed"
+use = "archive"
+
+[[open.rules]]
+mime = "application/x-compress"
+use = "archive"
+
+[[open.rules]]
+mime = "application/x-lzma"
+use = "archive"
+
+[[open.rules]]
+mime = "application/x-iso9660-image"
+use = "archive"
+
+[[open.rules]]
+mime = "text/html"
+use = "browser"
+
+[[open.rules]]
+mime = "application/xhtml+xml"
+use = "browser"
+
+[[open.rules]]
+mime = "*"
+use = "open"
+
+[[opener.archive]]
+block = true
+desc = "Extract here"
+run = '/etc/profiles/per-user/tower/bin/unar "$1" -o "$(dirname "$1")"'
+
+[[opener.archive]]
+block = true
+desc = "Extract to subfolder"
+run = '''
+dir="$(basename "$1" | sed 's/\.[^.]*$//')"
+mkdir -p "$dir" && /etc/profiles/per-user/tower/bin/unar "$1" -o "$dir"
+'''
+
+[[opener.audio]]
+block = true
+desc = "mpv (audio)"
+run = 'mpv --no-video "$@"'
+
+[[opener.audio]]
+desc = "VLC"
+orphan = true
+run = 'vlc "$@"'
+
+[[opener.browser]]
+desc = "Firefox"
+orphan = true
+run = 'firefox "$@"'
+
+[[opener.database]]
+block = true
+desc = "visidata"
+run = 'vd "$@"'
+
+[[opener.directory]]
+desc = "Open dir in zedless"
+orphan = true
+run = 'zedless "$@"'
+
+[[opener.edit]]
+desc = "zedless"
+orphan = true
+run = 'zedless "$@"'
+
+[[opener.edit]]
+block = true
+desc = "Neovim"
+run = 'nvim "$@"'
+
+[[opener.edit]]
+block = true
+desc = "micro"
+run = 'micro "$@"'
+
+[[opener.image]]
+desc = "nomacs"
+orphan = true
+run = 'nomacs "$@"'
+
+[[opener.image]]
+desc = "GIMP"
+orphan = true
+run = 'gimp "$@"'
+
+[[opener.json]]
+desc = "zedless"
+orphan = true
+run = 'zedless "$@"'
+
+[[opener.json]]
+block = true
+desc = "jq preview"
+run = 'jq . "$@" | less'
+
+[[opener.open]]
+desc = "xdg-open"
+orphan = true
+run = 'xdg-open "$@"'
+
+[[opener.pdf]]
+desc = "Okular"
+orphan = true
+run = 'okular "$@"'
+
+[[opener.pdf]]
+desc = "xdg-open"
+orphan = true
+run = 'xdg-open "$@"'
+
+[[opener.video]]
+desc = "mpv"
+orphan = true
+run = 'mpv "$@"'
+
+[[opener.video]]
+desc = "VLC"
+orphan = true
+run = 'vlc "$@"'
+
+[preview]
+cache_dir = ""
+image_delay = 0 
+image_filter = "lanczos3"
+image_quality = 85
+max_height = 2048
+max_width = 2048
+tab_size = 4
+wrap = "yes"
+
+[tasks]
+image_alloc = 4294967295
+image_bound = [0, 0]
+macro_workers = 30
+micro_workers = 56
+
+[which]
+sort_reverse = false
+sort_sensitive = false

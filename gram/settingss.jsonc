@@ -1,0 +1,90 @@
+// Gram settings
+//
+// For information on how to configure Gram, see the Gram
+// documentation: gram://docs/configuring-gram
+//
+// To see all of Gram's default settings without changing your
+// custom settings, run `gram: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+//
+//change language server to "nixd" if more features are needed. nil is lightweight, nixd is full featured
+{
+  "lsp": {
+    "lemminx": {
+      "binary": {
+        "allow_binary_download": true
+      },
+      "enable_lsp_tasks": true
+    },
+    "prettier (default)": {
+      "binary": {
+        "allow_binary_download": true
+      },
+      "enable_lsp_tasks": true
+    },
+    "json-language-server": {
+      "binary": {
+        "allow_binary_download": true
+      },
+      "enable_lsp_tasks": true
+    },
+    "package-version-server": {
+      "binary": {
+        "allow_binary_download": true
+      },
+      "enable_lsp_tasks": true
+    }
+  },
+  "diagnostics": {
+    "inline": {
+      "enabled": true,
+    },
+  },
+  "node": {
+    "allow_binary_download": false,
+  },
+  "project_panel": {
+    "file_icons": true,
+    "folder_icons": true,
+  },
+  "hide_mouse": "never",
+  "multi_cursor_modifier": "alt",
+  "buffer_line_height": {
+    "custom": 1.4,
+  },
+  "redact_private_values": false,
+  "terminal": {
+    "scrollbar": {
+      "show": "always",
+    },
+  },
+  "show_wrap_guides": true,
+  "icon_theme": "Gram (Default)",
+  "vim_mode": false,
+  "ui_font_size": 14,
+  "buffer_font_size": 14,
+  "theme": {
+    "mode": "dark",
+    "light": "macOS Classic Dark",
+    "dark": "Ayu Dark",
+  },
+  //  "languages": {
+  //    "Nix": {
+  //      "language_servers": ["!nil", "nid", "..."],
+  //    },
+  //  },
+  //  "lsp": {
+  //    "json-language-server": {
+  //      "binary": {
+  //        "ignore_system_version": false,
+  //        "allow_binary_download": true,
+  //      },
+  //      "enable_lsp_tasks": true,
+  //    },
+  //    "nixd": {
+  //      "binary": {
+  //        "path": "/run/current-system/sw/bin/nixd",
+  //      },
+  //    },
+  //  },
+}

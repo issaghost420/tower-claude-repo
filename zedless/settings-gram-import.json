@@ -1,0 +1,127 @@
+{
+  "session": {
+    "trust_all_worktrees": true
+  },
+  "cli_default_open_behavior": "existing_window",
+  "edit_predictions": {
+    "open_ai_compatible_api": {
+      "api_url": "http://localhost:1234/v1"
+    },
+    "allow_data_collection": "no"
+  },
+  "instrumentation": {
+    "performance_profiler": {
+      "enabled": true
+    }
+  },
+  "agent_servers": {
+    "qwen/qwen3.8-27b": {
+      "env": {
+        "LMSTUDIO_API_KEY": "sk-lm-sr0w8FjI:eCRRZox1tnY7FZ2Skk35"
+      },
+      "type": "custom",
+      "command": "/home/tower/archive-of-infinite-fold/tower-data-plain/lm-studio/hub/models/qwen/qwen3.8-27b",
+    }
+  },
+  "agent": {
+    "tool_permissions": {
+      "tools": {
+        "terminal": {
+          "default": "confirm"
+        }
+      }
+    },
+    "auto_compact": {
+      "threshold": "90%"
+    },
+    "sandbox_permissions": {
+      "write_paths": [
+        "/sata/etc"
+      ]
+    },
+    "default_model": {
+      "provider": "lmstudio",
+      "model": "qwen/qwen3.8-27b"
+      }
+    },
+  "language_models": {
+    "openai_compatible": {
+      
+    }
+  },
+  "context_servers": {
+    "local-files": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/local-files-smart.js",
+        "/home/tower",
+        "/etc/nixos",
+        "/var/log",
+        "/var/lib",
+        "/data",
+        "/data3",
+        "/data4",
+        "/hdd2",
+        "/990",
+        "/sata",
+        "/tmp",
+        "/mnt/titan",
+        "/mnt/dacrib"
+      ]
+    },
+    "agent-memory": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/node_modules/mcp-simple-memory/dist/cli.js",
+        "serve"
+      ]
+    },
+    "web-search": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/node_modules/mcp-searxng/dist/index.js"
+      ],
+      "env": {
+        "SEARXNG_URL": "http://localhost:8888/sear"
+      }
+    },
+    "shell": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/node_modules/mcp-shell-server/bin/server.js"
+      ]
+    },
+    "browser": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/node_modules/@playwright/mcp/cli.js",
+        "--browser",
+        "chromium"
+      ],
+      "env": {
+        "PLAYWRIGHT_CHROMIUM_ARGS": "--disable-gpu --disable-software-rasterizer"
+      }
+    },
+    "git": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/node_modules/mcp-git/dist/cli.js"
+      ]
+    },
+    "deep-research": {
+      "command": "/run/current-system/sw/bin/deepresearch-mcp",
+      "args": [],
+      "env": {
+        "RESEARCH_CONFIG": "/home/tower/tools/mcp-servers/deepresearch/config/research.yml"
+      }
+    }
+  },
+  "proxy": "",
+  "ui_font_size": null,
+  "buffer_font_size": 15,
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "Gruvbox Dark"
+  }
+}

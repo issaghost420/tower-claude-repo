@@ -1,0 +1,76 @@
+# ============================================
+# TowerStack .gitignore
+# ============================================
+
+# Secrets and credentials
+.env
+*.pem
+*.key
+secrets/
+wireguard/
+*.conf
+!docker-compose.yml
+
+# Data directories (large, generated, or sensitive)
+data/
+models/
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.pth
+
+# Archive mount (separate filesystem)
+archive-of-infinite-fold/
+
+# Service outputs (generated audio/files)
+*/outputs/
+outputs/
+*/logs/
+logs/
+
+# HuggingFace cache
+hf_cache/
+.cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.wav
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Node
+node_modules/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+.aider*
+chatterbox-tts/
+shell-configs/.oh-my-zsh/
+wireguard/
+system-monitor/towermon-logs/
+backups/
+Sunshine-scrollstack/
+vllm-cluster/
+system-monitor/history/
+article-reader-tts/
+*.dat
+*.dsl
+*.zst
+*.kwinscript

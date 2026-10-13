@@ -1,0 +1,543 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "language_models": {
+    "openai_compatible": {
+      
+    },
+    "ollama": {
+      "context_window": 32768,
+      "api_url": "http://localhost:11434/v1/completions"
+    }
+  },
+  "git": {
+    "inline_blame": {
+      "show_commit_summary": true
+    }
+  },
+  "terminal": {
+    "max_scroll_history_lines": 50000,
+    "copy_on_select": true
+  },
+  "debugger": {
+    "stepping_granularity": "instruction"
+  },
+  "window_decorations": "client",
+  "bottom_dock_layout": "contained",
+  "tab_bar": {
+    "show_pinned_tabs_in_separate_row": true
+  },
+  "tabs": {
+    "show_diagnostics": "all",
+    "activate_on_close": "neighbour",
+    "file_icons": false
+  },
+  "title_bar": {
+    "button_layout": "platform_default"
+  },
+  "status_bar": {
+    "show_active_file": false,
+    "line_endings_button": true
+  },
+  "file_finder": {
+    "modal_max_width": "small"
+  },
+  "search": {
+    "regex": true
+  },
+  "use_smartcase_search": true,
+  "semantic_tokens": "combined",
+  "show_wrap_guides": true,
+  "soft_wrap": "editor_width",
+  "which_key": {
+    "enabled": true
+  },
+  "autosave": "off",
+  "colorize_brackets": true,
+  "middle_click_paste": true,
+  "code_lens": "on",
+  "inlay_hints": {
+    "enabled": true
+  },
+  "completion_menu_item_kind": "symbol",
+  "show_whitespaces": "all",
+  "indent_guides": {
+    "background_coloring": "indent_aware",
+    "coloring": "indent_aware"
+  },
+  "vim": {
+    "cursor_shape": {
+      "normal": "hollow"
+    }
+  },
+  "minimap": {
+    "show": "auto"
+  },
+  "relative_line_numbers": "enabled",
+  "show_signature_help_after_edits": true,
+  "auto_signature_help": true,
+  "sticky_scroll": {
+    "enabled": true
+  },
+  "autoscroll_on_clicks": true,
+  "mouse_wheel_zoom": true,
+  "double_click_in_multibuffer": "open",
+  "buffer_line_height": "comfortable",
+  "buffer_font_weight": 400.0,
+  "buffer_font_family": "Unifont-T",
+  "when_closing_with_no_tabs": "close_window",
+  "base_keymap": "VSCode",
+  "icon_theme": {
+    "mode": "system",
+    "light": "Zedless (Default)",
+    "dark": "Zedless (Default)"
+  },
+  "vim_mode": false,
+  "diagnostics": {
+    "inline": {
+      "enabled": true
+    }
+  },
+  "prettier": {
+    "parser": "",
+    "allowed": true
+  },
+  "session": {
+    "trust_all_worktrees": true
+  },
+  "proxy": "",
+  "edit_predictions": {
+    "allow_data_collection": "no",
+    "ollama": {
+      "api_url": "http://localhost:8001",
+      "prompt_format": "infer"
+    }
+  },
+  "cli_default_open_behavior": "existing_window",
+  "git_panel": {
+    "tree_view": true,
+    "dock": "left"
+  },
+  "project_panel": {
+    "dock": "left"
+  },
+  "agent": {
+    "show_turn_stats": true,
+    "single_file_review": true,
+    "inline_assistant_model": {
+      "provider": "lmstudio",
+      "model": "zai-org/glm-4.7-flash",
+      "enable_thinking": false
+    },
+    "profiles": {
+      "hacks-2": {
+        "name": "hacks2",
+        "tools": {
+          "read_file": true
+        },
+        "enable_all_context_servers": false,
+        "context_servers": {
+          "local-files": {
+            "tools": {
+              "read_file": true,
+              "edit_file": false,
+              "directory_tree": true
+            }
+          }
+        },
+        "default_model": {
+          "provider": "lmstudio",
+          "model": "nvidia/nemotron-3-nano",
+          "enable_thinking": false
+        }
+      },
+      "hacks": {
+        "default_model": {
+          "provider": "lmstudio",
+          "model": "nvidia/nemotron-3-nano",
+          "enable_thinking": false
+        },
+        "name": "hacks",
+        "tools": {
+          "read_file": true
+        },
+        "enable_all_context_servers": false,
+        "context_servers": {
+          "local-files": {
+            "tools": {
+              "read_file": true,
+              "edit_file": false,
+              "directory_tree": true
+            }
+          }
+        }
+      }
+    },
+    "default_profile": "hacks",
+    "tool_permissions": {
+      "default": "confirm",
+      "tools": {
+        "mcp:local-files:directory_tree": {
+          "default": "allow"
+        },
+        "terminal": {
+          "always_confirm": [
+            {
+              "pattern": "mv"
+            },
+            {
+              "pattern": "pip"
+            },
+            {
+              "pattern": "flatpak"
+            },
+            {
+              "pattern": "apt"
+            },
+            {
+              "pattern": "hf"
+            },
+            {
+              "pattern": "nano"
+            },
+            {
+              "pattern": "micro"
+            },
+            {
+              "pattern": "sed"
+            },
+            {
+              "pattern": "podman pull"
+            },
+            {
+              "pattern": "podman build"
+            },
+            {
+              "pattern": "docker pull"
+            },
+            {
+              "pattern": "docker build"
+            },
+            {
+              "pattern": "inotify"
+            },
+            {
+              "pattern": "git clone"
+            },
+            {
+              "pattern": "sudo"
+            },
+            {
+              "pattern": "systemctl"
+            },
+            {
+              "pattern": "tmp"
+            },
+            {
+              "pattern": ".cache"
+            },
+            {
+              "pattern": "var"
+            },
+            {
+              "pattern": ".local"
+            },
+            {
+              "pattern": "curl -L"
+            },
+            {
+              "pattern": "restart"
+            },
+            {
+              "pattern": "stop"
+            }
+          ],
+          "always_allow": [
+            {
+              "pattern": "ls"
+            },
+            {
+              "pattern": "grep"
+            },
+            {
+              "pattern": "diff"
+            },
+            {
+              "pattern": "cat"
+            },
+            {
+              "pattern": "bat"
+            },
+            {
+              "pattern": "sudo journalctl"
+            },
+            {
+              "pattern": "nvidia-smi --format"
+            },
+            {
+              "pattern": "nvidia-smi RUSD"
+            },
+            {
+              "pattern": "nvidia-smi SOC"
+            }
+          ],
+          "always_deny": [
+            {
+              "pattern": "rm"
+            },
+            {
+              "pattern": "rm -rf"
+            },
+            {
+              "pattern": "sudo chown"
+            },
+            {
+              "pattern": "pkill"
+            },
+            {
+              "pattern": "kill"
+            },
+            {
+              "pattern": "reboot"
+            },
+            {
+              "pattern": "unlock"
+            },
+            {
+              "pattern": "lock"
+            },
+            {
+              "pattern": "chown"
+            },
+            {
+              "pattern": "chmod"
+            },
+            {
+              "pattern": "chattr"
+            },
+            {
+              "pattern": "sudo chmod"
+            },
+            {
+              "pattern": "sudo ls"
+            },
+            {
+              "pattern": "sudo cat"
+            },
+            {
+              "pattern": "sudo nano"
+            },
+            {
+              "pattern": "sudo sed"
+            },
+            {
+              "pattern": "sudo rm"
+            },
+            {
+              "pattern": "sudo shutdown"
+            },
+            {
+              "pattern": "sudo chattr"
+            },
+            {
+              "pattern": "sudo mv"
+            },
+            {
+              "pattern": "sudo cp"
+            },
+            {
+              "pattern": "sudo nix"
+            },
+            {
+              "pattern": "npm"
+            },
+            {
+              "pattern": "rsync"
+            },
+            {
+              "pattern": "ln"
+            },
+            {
+              "pattern": "flatpak"
+            },
+            {
+              "pattern": "apt"
+            },
+            {
+              "pattern": "unzip"
+            },
+            {
+              "pattern": "zip"
+            },
+            {
+              "pattern": "7z"
+            },
+            {
+              "pattern": "conversation"
+            },
+            {
+              "pattern": "workflow"
+            },
+            {
+              "pattern": "preset"
+            },
+            {
+              "pattern": "voices"
+            },
+            {
+              "pattern": "reference_audio"
+            },
+            {
+              "pattern": "fish-speech/references"
+            },
+            {
+              "pattern": "Documents"
+            },
+            {
+              "pattern": "iphone"
+            },
+            {
+              "pattern": "data-export"
+            },
+            {
+              "pattern": "data_export"
+            },
+            {
+              "pattern": "vault"
+            },
+            {
+              "pattern": "gocrypt"
+            },
+            {
+              "pattern": "nvidia-smi --auto"
+            },
+            {
+              "pattern": "nvidia-smi -p"
+            },
+            {
+              "pattern": "nvidia-smi -l"
+            },
+            {
+              "pattern": "nvidia-smi -i"
+            },
+            {
+              "pattern": "nvidia-smi -r"
+            },
+            {
+              "pattern": "nvidia-smi -c"
+            },
+            {
+              "pattern": "nvidia-smi -t"
+            },
+            {
+              "pattern": "nvidia-smi -g"
+            },
+            {
+              "pattern": "nvidia-smi --power"
+            }
+          ]
+        },
+        "mcp:browser:browser_navigate": {
+          "default": "allow"
+        },
+        "fetch": {
+          "always_allow": [
+            {
+              "pattern": "^https?://github\\.com"
+            }
+          ]
+        },
+        "mcp:web-search:searxng_web_search": {
+          "default": "allow"
+        }
+      }
+    },
+    "default_model": {
+      "provider": "lmstudio",
+      "model": "qwen/qwen3.8-27b",
+      "enable_thinking": false
+    },
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "context_servers": {
+    "local-files": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/local-files-smart.js",
+        "/home/tower",
+        "/etc/nixos",
+        "/var/log",
+        "/var/lib",
+        "/data",
+        "/data3",
+        "/data4",
+        "/hdd2",
+        "/990",
+        "/sata",
+        "/tmp",
+        "/mnt/titan",
+        "/mnt/dacrib"
+      ]
+    },
+    "agent-memory": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/node_modules/mcp-simple-memory/dist/cli.js",
+        "serve"
+      ]
+    },
+    "web-search": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/node_modules/mcp-searxng/dist/index.js"
+      ],
+      "env": {
+        "SEARXNG_URL": "http://localhost:8888/sear"
+      }
+    },
+    "shell": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/node_modules/mcp-shell-server/bin/server.js"
+      ]
+    },
+    "browser": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/node_modules/@playwright/mcp/cli.js",
+        "--browser",
+        "chromium"
+      ],
+      "env": {
+        "PLAYWRIGHT_CHROMIUM_ARGS": "--disable-gpu --disable-software-rasterizer"
+      }
+    },
+    "git": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/node_modules/mcp-git/dist/cli.js"
+      ]
+    },
+    "deep-research": {
+      "command": "/run/current-system/sw/bin/deepresearch-mcp",
+      "args": [],
+      "env": {
+        "RESEARCH_CONFIG": "/home/tower/tools/mcp-servers/deepresearch/config/research.yml"
+      }
+    }
+  },
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "theme": {
+    "mode": "dark",
+    "light": "Gruvbox Light",
+    "dark": "Gruvbox Dark Hard",
+  },
+}

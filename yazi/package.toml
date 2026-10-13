@@ -1,0 +1,7 @@
+[[plugin.deps]]
+use = "barbanevosa/linemode-plus"
+rev = "4d0d034"
+hash = "5d0ac26725d9a975bef1d0887374f10e"
+
+[flavor]
+deps = []

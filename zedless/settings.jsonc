@@ -1,0 +1,463 @@
+// ~/.config/zed/settings.json
+// This file is JSONC: JSON + // comments. Everything else is strict JSON.
+//
+// THE ONLY THREE RULES:
+//   {}  = object  -> every entry is  "key": value
+//   []  = array   -> every entry is  just a value
+//   ,   = between entries, NOT after the last one
+//
+// If you're ever unsure whether something is {} or [], ask:
+// "does each item need a name?" -> {}   "is it just a list?" -> []
+{
+  // ─────────────────────────────────────────────────────────────
+  // APPEARANCE
+  // ─────────────────────────────────────────────────────────────
+  "theme": {
+    "mode": "dark",
+    "dark": "Ayu Dark",
+    "light": "One Light",
+  },
+  "icon_theme": "Gram (Default)",
+  "ui_font_size": 14,
+  "buffer_font_size": 14,
+  "buffer_line_height": { "custom": 1.4 },
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+
+  "hide_mouse": "never",
+  "multi_cursor_modifier": "alt",
+  "vim_mode": false,
+  "cursor_shape": "bar",
+  "show_wrap_guides": false,
+  "wrap_guides": [170],
+  "relative_line_numbers": "disabled",
+
+  "gutter": {
+    "line_numbers": true,
+    "runnables": true,
+    "breakpoints": true,
+    "folds": true,
+  },
+
+  "indent_guides": {
+    "enabled": true,
+    "coloring": "indent_aware",
+  },
+
+  "minimap": {
+    "show": "auto",
+    "thumb": "hover",
+  },
+
+  "scrollbar": {
+    "show": "auto",
+    "diagnostics": "all",
+  },
+
+  "toolbar": {
+    "breadcrumbs": true,
+    "quick_actions": true,
+    "code_actions": true,
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // EDITING / FORMATTING DEFAULTS
+  // These are GLOBAL. Override any of them per-language down in
+  // "languages" below. They do NOT belong inside "lsp".
+  // ─────────────────────────────────────────────────────────────
+  "tab_size": 2,
+  "hard_tabs": false,
+  "soft_wrap": "editor_width",
+  "preferred_line_length": 100,
+  "allow_rewrap": "anywhere",
+  "format_on_save": "on",
+  "formatter": "auto",
+  "remove_trailing_whitespace_on_save": true,
+  "ensure_final_newline_on_save": true,
+  "use_on_type_format": true,
+  "use_autoclose": true,
+  "use_auto_surround": true,
+  "auto_indent_on_paste": true,
+  "redact_private_values": false,
+
+  // ─────────────────────────────────────────────────────────────
+  // INTELLIGENCE — diagnostics, hints, completions
+  // ─────────────────────────────────────────────────────────────
+  "diagnostics": {
+    "button": true,
+    "include_warnings": true,
+    "inline": {
+      "enabled": true,
+      "update_debounce_ms": 150,
+      "padding": 4,
+      "max_severity": "warning",
+    },
+  },
+  "diagnostics_max_severity": "all",
+
+  "inlay_hints": {
+    "enabled": true,
+    "show_type_hints": true,
+    "show_parameter_hints": true,
+    "show_other_hints": true,
+    "edit_debounce_ms": 700,
+  },
+
+  "completions": {
+    "words": "fallback",
+    "lsp": true,
+    "lsp_insert_mode": "replace_suffix",
+  },
+  "show_completions_on_input": true,
+  "show_completion_documentation": true,
+
+  "code_lens": "on",
+  "lsp_document_colors": "inlay",
+  "semantic_tokens": "combined",
+  "document_folding_ranges": "on",
+
+  "global_lsp_settings": {
+    "button": true,
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // DEBUGGER (DAP)
+  // Rust / C / C++ / JS / TS / Go / Python adapters ship built in.
+  // Per-project launch configs go in .zed/debug.json, not here.
+  // ─────────────────────────────────────────────────────────────
+  "debugger": {
+    "dock": "bottom",
+    "button": true,
+    "save_breakpoints": true,
+    "stepping_granularity": "line",
+    "timeout": 4000,
+    "log_dap_communications": false,
+    "format_dap_log_messages": true,
+  },
+
+  // Only needed if you want to override where an adapter binary lives.
+  // On NixOS this is usually the fix when a downloaded adapter won't run.
+  // "dap": {
+  //   "CodeLLDB": { "binary": "/run/current-system/sw/bin/lldb-dap" }
+  // },
+
+  // ─────────────────────────────────────────────────────────────
+  // TASKS / TERMINAL / GIT / PANELS
+  // ─────────────────────────────────────────────────────────────
+  "tasks": {
+    "enabled": true,
+    "prefer_lsp": false,
+  },
+
+  "terminal": {
+    "dock": "bottom",
+    "shell": "system",
+    "copy_on_select": false,
+    "line_height": "standard",
+    "detect_venv": {
+      "on": {
+        "directories": [".env", "env", ".venv", "venv"],
+        "activate_script": "default",
+      },
+    },
+    "toolbar": { "breadcrumbs": true },
+    "scrollbar": { "show": "always" },
+  },
+
+  "git": {
+    "git_gutter": "tracked_files",
+    "inline_blame": {
+      "enabled": true,
+      "delay_ms": 500,
+      "show_commit_summary": true,
+    },
+    "hunk_style": "staged_hollow",
+  },
+
+  "git_panel": {
+    "button": true,
+    "dock": "left",
+    "status_style": "icon",
+  },
+
+  "project_panel": {
+    "dock": "left",
+    "file_icons": true,
+    "folder_icons": true,
+    "git_status": true,
+    "auto_fold_dirs": true,
+    "sticky_scroll": true,
+    "show_diagnostics": "all",
+    "indent_guides": { "show": "always" },
+  },
+
+  "outline_panel": { "dock": "right" },
+
+  // ─────────────────────────────────────────────────────────────
+  // NODE
+  // Real keys are: ignore_system_version, path, npm_path.
+  // There is no "allow_node" and no "allow_binary_download" here.
+  // ─────────────────────────────────────────────────────────────
+  "node": {
+    "allow_npm_install": true,
+    "allow_prettier_download": true,
+    "allow_binary_download": true,
+    "ignore_system_version": false,
+    "path": null,
+    "npm_path": null,
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // PRETTIER
+  // Top-level, NOT inside "lsp". "allowed" + "plugins" are Zed's;
+  // everything else here is passed straight through to Prettier.
+  // ─────────────────────────────────────────────────────────────
+  "prettier": {
+    "allowed": true,
+    "plugins": [],
+    "printWidth": 100,
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": false,
+    "trailingComma": "es5",
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // EXTENSIONS
+  // true = install on startup, false = never install.
+  // Slugs must match the extension IDs exactly. Safest way to get
+  // them right: install once from the Extensions panel, then run
+  //   ls ~/.local/share/zed/extensions/installed
+  // and copy the folder names in here.
+  // ─────────────────────────────────────────────────────────────
+  "auto_install_extensions": {
+    "html": true,
+    "toml": true,
+    "tombi": true,
+    "nix": true,
+    "dockerfile": true,
+    "docker-compose": true,
+    "xml": true,
+    "sql": true,
+    "make": true,
+    "ini": true,
+    "env": true,
+    "log": true,
+    "justfile": true,
+    "git-firefly": true,
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // FILE TYPES
+  // This is what makes your Zed/VS Code configs parse as JSONC
+  // (comments allowed) instead of erroring as strict JSON.
+  // ─────────────────────────────────────────────────────────────
+  "file_types": {
+    "JSONC": [
+      "**/.zed/**/*.json",
+      "**/zed/**/*.json",
+      "**/Zed/**/*.json",
+      "**/.vscode/**/*.json",
+      "*.jsonc",
+      "tsconfig*.json",
+      "jsconfig*.json",
+    ],
+    "Shell Script": [".env.*", ".envrc"],
+    "TOML": ["*.toml", "Cargo.lock"],
+    "Nix": ["*.nix"],
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // LANGUAGE SERVERS
+  // Each key is a SERVER name. Only these belong inside each one:
+  //   "binary"                -> path / arguments / download behavior
+  //   "initialization_options" -> read once at server startup
+  //   "settings"              -> hot-reloadable server config
+  //   "enable_lsp_tasks"      -> show server-provided run tasks
+  // Formatting, wrapping and prettier options do NOT go here.
+  // ─────────────────────────────────────────────────────────────
+  "lsp": {
+    "taplo": {
+      //      "prettier": {
+      //        "allowed": true,
+      //      },
+      "binary": {
+        "allow_binary_download": true,
+      },
+      "enable_lsp_tasks": true,
+    },
+    "clangd": {
+      "binary": {
+        "ignore_system_version": false,
+        "enable_auto_updates": false,
+        "allow_binary_download": true,
+      },
+      "enable_lsp_tasks": true,
+    },
+    "json-language-server": {
+      "enable_lsp_tasks": true,
+      "binary": {
+        "enable_auto_updates": false,
+        "allow_binary_download": true,
+        "ignore_system_version": true,
+      },
+      "settings": {
+        "json": {
+          "validate": { "enable": true },
+          // fileMatch = globs, url = the schema to apply to them
+          "schemas": [
+            {
+              "fileMatch": ["package.json"],
+              "url": "https://json.schemastore.org/package.json",
+            },
+            {
+              "fileMatch": ["tsconfig.json", "tsconfig.*.json"],
+              "url": "https://json.schemastore.org/tsconfig.json",
+            },
+            {
+              "fileMatch": [".eslintrc", ".eslintrc.json"],
+              "url": "https://json.schemastore.org/eslintrc.json",
+            },
+          ],
+        },
+      },
+    },
+
+    "yaml-language-server": {
+      "enable_lsp_tasks": true,
+      "settings": {
+        "yaml": {
+          "keyOrdering": false,
+          "format": { "singleQuote": false },
+        },
+      },
+    },
+
+    "bash-language-server": {
+      "binary": {
+        "enable_auto_updates": false,
+        "ignore_system_version": true,
+        "allow_binary_download": true,
+      },
+      "enable_lsp_tasks": true,
+      "settings": {
+        "bashIde": {
+          "shellcheckPath": "shellcheck",
+          "shfmt": { "path": "shfmt" },
+        },
+      },
+    },
+
+    "lemminx": {
+      "enable_lsp_tasks": true,
+      "settings": {
+        "xml": {
+          "format": {
+            "splitAttributes": false,
+            "joinCDATALines": false,
+          },
+        },
+      },
+    },
+
+    "tombi": {
+      "enable_lsp_tasks": true,
+      "binary": {
+        "allow_binary_download": true,
+      },
+    },
+
+    "nixd": {
+      "enable_lsp_tasks": true,
+      "binary": {
+        // NixOS: point at the nix-store binary. Downloaded servers are
+        // linked against /lib64/ld-linux and will not start here.
+        "allow_binary_download": true,
+        "path": "/run/current-system/sw/bin/nixd",
+        "arguments": [],
+      },
+    },
+
+    "package-version-server": {
+      "binary": {
+        "enable_auto_updates": false,
+        "allow_binary_download": true,
+      },
+      "enable_lsp_tasks": true,
+    },
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // PER-LANGUAGE OVERRIDES
+  // Keys here are LANGUAGE names ("Nix", "TOML", "JSON"), not
+  // server names. "..." means "then all the defaults".
+  // "!name" means "never use this one".
+  // ─────────────────────────────────────────────────────────────
+  "languages": {
+    "JSON": {
+      "tab_size": 2,
+      "language_servers": ["json-language-server", "..."],
+      "prettier": { "allowed": true },
+    },
+    "JSONC": {
+      "tab_size": 2,
+      "language_servers": ["json-language-server", "..."],
+      "prettier": { "allowed": true },
+    },
+    "TOML": {
+      "tab_size": 2,
+      "language_servers": ["tombi", "..."],
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": true,
+      },
+    },
+    "YAML": {
+      "tab_size": 2,
+      "language_servers": ["yaml-language-server", "..."],
+      "prettier": {
+        "allowed": true,
+      },
+    },
+    "XML": {
+      "tab_size": 2,
+      "language_servers": ["lemminx", "..."],
+      "prettier": {
+        "allowed": true,
+      },
+    },
+    "Nix": {
+      "tab_size": 2,
+      "language_servers": ["nixd", "!nil", "..."],
+      "prettier": {
+        "allowed": true,
+      },
+      "formatter": {
+        "external": {
+          "command": "nixfmt",
+          "arguments": [],
+        },
+      },
+    },
+    "Shell Script": {
+      "tab_size": 2,
+      "language_servers": ["bash-language-server", "..."],
+      "prettier": {
+        "allowed": true,
+      },
+      "formatter": {
+        "external": {
+          "command": "shfmt",
+          "arguments": ["-i", "2", "-ci"],
+        },
+      },
+    },
+    "Markdown": {
+      "soft_wrap": "preferred_line_length",
+      "prettier": {
+        "allowed": true,
+      },
+      "format_on_save": "off",
+      "remove_trailing_whitespace_on_save": false,
+    },
+  },
+}

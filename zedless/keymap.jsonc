@@ -1,0 +1,112 @@
+// Gram keymap
+//
+// For information on binding keys, see the Gram
+// documentation: gram://docs/key-bindings
+//
+// To see the default key bindings run `gram: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      // "shift shift": "file_finder::Toggle"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      // "j k": "vim::NormalBefore"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-shift-g": "editor::BlameHover"
+    }
+  },
+  {
+    "context": "KeymapEditor",
+    "bindings": {
+      "ctrl-alt-shift-k": "keymap_editor::OpenCreateKeybindingModal"
+    }
+  },
+  {
+    "context": "KeymapEditor",
+    "bindings": {
+      "ctrl-k": null
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-k": "editor::DeleteLine"
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "alt-shift-w": "terminal::Clear"
+    }
+  },
+  {
+    "bindings": {
+      "ctrl-alt-'": "lsp::OpenLanguageServerConfig"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "alt-shift-r": [
+        "task::Rerun",
+        {
+          "reevaluate_context": false
+        }
+      ]
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "ctrl-shift-r": "terminal::RerunTask"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-alt-s": null
+    }
+  },
+  {
+  	"context": "Workspace",
+  	"bindings": {
+  	  "ctrl-v": "paste"
+  	}
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-shift-u": "editor::Format"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-super-l": "language_selector::Toggle"
+    }
+  },
+  {
+    "bindings": {
+      "ctrl-super-8": "editor::SelectUpByLines"
+    }
+  },
+  {
+    "bindings": {
+      "ctrl-super-2": "editor::SelectDownByLines"
+    }
+  },
+  {
+    "bindings": {
+      "alt-|": "editor::SplitSelectionIntoLines"
+    }
+  }
+]

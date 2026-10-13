@@ -15,5 +15,7 @@ jq 'walk(if type == "object" and (.enum | type) == "array" and any(.enum[]; type
 # Route every MCP tool through the loop guard (argc rebuilds these symlinks on each start)
 GUARD="$HOME/tools/mcp-servers/llm-tool-guard.sh"
 for bin in bin/*; do
-  [[ -L "$bin" && "$(readlink "$bin")" == *run-mcp-tool.sh ]] && ln -sfn "$GUARD" "$bin"
+  if [[ -L "$bin" && "$(readlink "$bin")" == *run-mcp-tool.sh ]]; then
+    ln -sfn "$GUARD" "$bin"
+  fi
 done

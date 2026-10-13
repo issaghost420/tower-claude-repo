@@ -271,7 +271,7 @@ _mcp_bridge_up() {
   ~/tools/mcp-servers/aichat-mcp-start.sh >/dev/null 2>&1
 }
 
-# halp: aichat + web search + read-only file tools (role: ~/.config/aichat/roles/halp.md)
+# halp: aichat + web search + read-only file tools + create-new-file (no overwrite) (role: ~/.config/aichat/roles/halp.md)
 halp() {
   local context="Current directory: $PWD
 Recent commands:
@@ -279,7 +279,7 @@ $(fc -ln -20)
 
 Question: $*"
   _mcp_bridge_up || echo "⚠️  MCP bridge not running, no tools this time" >&2
-  echo "$context" | LLM_MCP_SKIP_CONFIRM='web_search_searxng_web_search|web_search_web_url_read|local_files_read_file|local_files_read_multiple_files|local_files_list_directory|local_files_directory_tree|local_files_search_files|local_files_get_file_info|local_files_list_allowed_directories' \
+  echo "$context" | LLM_MCP_SKIP_CONFIRM='web_search_searxng_web_search|web_search_web_url_read|local_files_read_file|local_files_read_multiple_files|local_files_list_directory|local_files_directory_tree|local_files_search_files|local_files_get_file_info|local_files_list_allowed_directories|local_files_create_file' \
     aichat -r halp 2>/dev/null | sed '/<think>/,/<\/think>/d; /<think>/,$d'
 }
 

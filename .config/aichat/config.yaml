@@ -18,6 +18,7 @@ mapping_tools:    # alias for a tool or toolset
   # MCP tools via llm-functions bridge (mcp-servers/llm-functions-mcp.json). Names must match exactly, no wildcards.
   web: 'web_search_searxng_web_search,web_search_web_url_read'
   fs-read: 'local_files_read_file,local_files_read_multiple_files,local_files_list_directory,local_files_directory_tree,local_files_search_files,local_files_get_file_info,local_files_list_allowed_directories'
+  fs-create: 'local_files_create_file'   # new files only, can't overwrite/edit
 use_tools: null   # Which tools to use by default (e.g. 'fs,web_search')
 
 # ---- session ----

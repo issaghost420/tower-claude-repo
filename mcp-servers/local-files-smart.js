@@ -209,6 +209,36 @@ async function getFileInfo(filePath) {
   };
 }
 
+async function createFile(filePath, content) {
+  const parent = path.dirname(path.resolve(filePath));
+  // Validate the nearest existing ancestor's real path before mkdir, so a
+  // symlinked dir can't get new dirs/files created outside allowed dirs
+  let existing = parent;
+  while (true) {
+    try {
+      await fs.access(existing);
+      break;
+    } catch {
+      existing = path.dirname(existing);
+    }
+  }
+  await resolveAndValidate(existing);
+  await fs.mkdir(parent, { recursive: true });
+  const target = path.join(await resolveAndValidate(parent), path.basename(filePath));
+  try {
+    // "wx" = O_CREAT|O_EXCL: the OS refuses if anything already exists at target
+    await fs.writeFile(target, content, { encoding: "utf-8", flag: "wx" });
+  } catch (err) {
+    if (err.code === "EEXIST") {
+      throw new Error(`${filePath} already exists. create_file never overwrites, pick a new name`);
+    }
+    throw err;
+  }
+  return {
+    content: [{ type: "text", text: `Created ${target}` }],
+  };
+}
+
 async function editFile(filePath, edits) {
   const resolved = await resolveAndValidate(filePath);
   let content = await fs.readFile(resolved, "utf-8");
@@ -267,6 +297,19 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: "write_file",
       description: "Write content to a file (creates or overwrites).",
+      inputSchema: {
+        type: "object",
+        properties: {
+          path: { type: "string" },
+          content: { type: "string" },
+        },
+        required: ["path", "content"],
+      },
+    },
+    {
+      name: "create_file",
+      description:
+        "Create a NEW file with content. Fails if the file already exists (never overwrites). Creates missing parent directories.",
       inputSchema: {
         type: "object",
         properties: {
@@ -385,6 +428,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "write_file":
         return await writeFile(args.path, args.content);
+      case "create_file":
+        return await createFile(args.path, args.content);
       case "edit_file":
         return await editFile(args.path, args.edits);
       case "list_directory":

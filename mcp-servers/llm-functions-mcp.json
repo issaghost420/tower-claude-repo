@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "web-search": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/node_modules/mcp-searxng/dist/index.js"
+      ],
+      "env": {
+        "SEARXNG_URL": "http://localhost:8888/sear"
+      }
+    },
+    "local-files": {
+      "command": "node",
+      "args": [
+        "/home/tower/tools/mcp-servers/local-files-smart.js",
+        "/home/tower",
+        "/etc/nixos",
+        "/var/log",
+        "/tmp"
+      ]
+    }
+  }
+}

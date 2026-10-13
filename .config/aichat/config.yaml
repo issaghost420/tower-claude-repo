@@ -1,7 +1,8 @@
 # aichat config - connects to LM Studio on localhost:1234
 # Docs: https://github.com/sigoden/aichat
+# API key comes from LMSTUDIO_API_KEY in ~/.secrets/lms.env (AICHAT_ENV_FILE is set in ~/.zshrc)
 
-model: lm-studio:local-model
+model: lmstudio:local-model
 temperature: null
 top_p: null
 
@@ -14,6 +15,9 @@ wrap_code: false
 function_calling: true
 mapping_tools:    # alias for a tool or toolset
 #  fs: 'fs_cat,fs_ls,fs_mkdir,fs_rm,fs_write'
+  # MCP tools via llm-functions bridge (mcp-servers/llm-functions-mcp.json). Names must match exactly, no wildcards.
+  web: 'web_search_searxng_web_search,web_search_web_url_read'
+  fs-read: 'local_files_read_file,local_files_read_multiple_files,local_files_list_directory,local_files_directory_tree,local_files_search_files,local_files_get_file_info,local_files_list_allowed_directories'
 use_tools: null   # Which tools to use by default (e.g. 'fs,web_search')
 
 # ---- session ----
@@ -73,19 +77,19 @@ save_shell_history: true                    # Whether to save shell execution co
 
 agent:
   - name: "dev"                # invoke with: ai agent dev
-    model: lm-studio:local-model
+    model: lmstudio:local-model
     temperature: 1.2
     system: ""
 
 clients:
 
   - type: openai-compatible
-    name: lm-studio
+    name: lmstudio                 # env var for the key = <NAME>_API_KEY -> LMSTUDIO_API_KEY
     api_base: http://localhost:1234/v1
-    api_key: sk-lm-sr0w8FjI:eCRRZox1tnY7FZ2Skk35
     models:
       - name: local-model
         max_input_tokens: 1000000
+        supports_function_calling: true
 
   # See https://docs.anthropic.com/claude/reference/getting-started-with-the-api
 #  - type: claude
@@ -102,7 +106,7 @@ clients:
 #  - type: openai-compatible
 #    name: ollama
 #    api_base: http://localhost:11434/v1
-#    api_key: sk-lm-sr0w8FjI:eCRRZox1tnY7FZ2Skk35 # <-- LM-Studio, otherwise optional
+#    api_key: xxx  # optional for ollama
 #    models:
 #      - name: deepseek-r1
 #        max_input_tokens: 131072

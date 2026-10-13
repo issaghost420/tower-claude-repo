@@ -1,0 +1,118 @@
+# aichat config - connects to LM Studio on localhost:1234
+# Docs: https://github.com/sigoden/aichat
+
+model: lm-studio:local-model
+temperature: null
+top_p: null
+
+stream: true
+save: true    # Indicates whether to persist the message
+# keybindings: emacs # or vi
+# wrap: no # auto, or max
+wrap_code: false
+
+function_calling: true
+mapping_tools:    # alias for a tool or toolset
+#  fs: 'fs_cat,fs_ls,fs_mkdir,fs_rm,fs_write'
+use_tools: null   # Which tools to use by default (e.g. 'fs,web_search')
+
+# ---- session ----
+save_session: true # true auto saves, false doesn't save, null will ask
+compress_threshold: 50000
+summarize_prompt: 'Summarize the discussion briefly in 200 words or less to use as a prompt for future context.'
+summary_prompt: 'Aight, this is the scroll: '
+
+# ---- RAG ----
+# See [RAG-Guide](https://github.com/sigoden/aichat/wiki/RAG-Guide) for more details.
+rag_embedding_model: null        # Specifies the embedding model used for context retrieval
+rag_reranker_model: null         # Specifies the reranker model used for sorting retrieved documents
+rag_top_k: 5                     # Specifies the number of documents to retrieve for answering queries
+rag_chunk_size: null             # Defines the size of chunks for document processing in characters
+rag_chunk_overlap: null          # Defines the overlap between chunks
+# Defines the query structure using variables like __CONTEXT__ and __INPUT__ to tailor searches to specific needs
+rag_template: |
+  Answer the query based on the context while respecting the rules. (user query, some textual context and rules, all inside xml tags)
+
+  <context>
+  __CONTEXT__
+  </context>
+
+  <rules>
+  - If you don't know, just say so.
+  - If you are not sure, ask for clarification.
+  - Answer in the same language as the user query.
+  - If the context appears unreadable or of poor quality, tell the user then answer as best as you can.
+  - If the answer is not in the context but you think you know the answer, explain that to the user then answer with your own knowledge.
+  - Answer directly and without using xml tags.
+  </rules>
+
+  <user_query>
+  __INPUT__
+  </user_query>
+
+# Define document loaders to control how RAG and `.file`/`--file` load files of specific formats.
+document_loaders:
+  # You can add custom loaders using the following syntax:
+  #   <file-extension>: <command-to-load-the-file>
+  # Note: Use `$1` for input file and `$2` for output file. If `$2` is omitted, use stdout as output.
+  pdf: 'pdftotext $1 -'                         # Load .pdf file, see https://poppler.freedesktop.org to set up pdftotext
+
+highlight: true                  # Controls syntax highlighting
+left_prompt:
+  '{color.green}{?session {?agent {agent}>}{session}{?role /}}{!session {?agent {agent}>}}{role}{?rag @{rag}}{color.cyan}{?session )}{!session >}{color.reset} '
+right_prompt:
+  '{color.purple}{?session {?consume_tokens {consume_tokens}({consume_percent}%)}{!consume_tokens {consume_tokens}}}{color.reset}'
+
+serve_addr: 127.0.0.1:8000                  # Server listening address
+user_agent: null                            # Set User-Agent HTTP header, use `auto` for aichat/<current-version>
+save_shell_history: true                    # Whether to save shell execution command to the history file
+
+#--------------------------------------------------------------
+# Agents - system prompt, tools, persona's
+#--------------------------------------------------------------
+
+agent:
+  - name: "dev"                # invoke with: ai agent dev
+    model: lm-studio:local-model
+    temperature: 1.2
+    system: ""
+
+clients:
+
+  - type: openai-compatible
+    name: lm-studio
+    api_base: http://localhost:1234/v1
+    api_key: sk-lm-sr0w8FjI:eCRRZox1tnY7FZ2Skk35
+    models:
+      - name: local-model
+        max_input_tokens: 1000000
+
+  # See https://docs.anthropic.com/claude/reference/getting-started-with-the-api
+#  - type: claude
+#    api_base: https://api.anthropic.com/v1            # Optional
+#    api_key: xxx
+
+  # See https://platform.moonshot.cn/docs/intro
+#  - type: openai-compatible
+#    name: moonshot
+#    api_base: https://api.moonshot.cn/v1
+#    api_key: xxx
+
+   # For any platform compatible with OpenAI's API
+#  - type: openai-compatible
+#    name: ollama
+#    api_base: http://localhost:11434/v1
+#    api_key: sk-lm-sr0w8FjI:eCRRZox1tnY7FZ2Skk35 # <-- LM-Studio, otherwise optional
+#    models:
+#      - name: deepseek-r1
+#        max_input_tokens: 131072
+#      - name: llama3.1
+#        max_input_tokens: 128000
+#        supports_function_calling: true
+#      - name: llama3.2-vision
+#        max_input_tokens: 131072
+#        supports_vision: true
+#      - name: nomic-embed-text
+#        type: embedding
+#        default_chunk_size: 1000
+#        max_batch_size: 50

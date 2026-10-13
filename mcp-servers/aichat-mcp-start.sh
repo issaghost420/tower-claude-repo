@@ -11,3 +11,9 @@ argc mcp start
 
 jq 'walk(if type == "object" and (.enum | type) == "array" and any(.enum[]; type != "string") then del(.enum) else . end)' \
   functions.json > functions.json.tmp && mv functions.json.tmp functions.json
+
+# Route every MCP tool through the loop guard (argc rebuilds these symlinks on each start)
+GUARD="$HOME/tools/mcp-servers/llm-tool-guard.sh"
+for bin in bin/*; do
+  [[ -L "$bin" && "$(readlink "$bin")" == *run-mcp-tool.sh ]] && ln -sfn "$GUARD" "$bin"
+done

@@ -1,5 +1,5 @@
 # halp — ask the local LLM (aichat -> LM Studio) a question, with web search,
-# file reading and create-only file writing through MCP tools.
+# file reading, create-only file writing and read-only SQLite queries through MCP tools.
 #
 #   halp "why is nix-switch failing"     ask (keeps a rolling window of recent turns)
 #   halp -n "new topic"                  flush the history, then ask
@@ -117,8 +117,8 @@ export AICHAT_ROLES_DIR="$HALP_ROLES_DIR"
 export LLM_FUNCTIONS_DIR="${LLM_FUNCTIONS_DIR:-$HOME/tools/llm-functions}"
 export LLM_GUARD_FILE="$guard"
 export LLM_GUARD_MAX="${HALP_MAX_TOOLS:-12}"
-# halp only exposes read + create-only tools, skip llm-functions' confirm prompt for them
-export LLM_MCP_SKIP_CONFIRM='web_search_searxng_web_search|web_search_web_url_read|local_files_read_file|local_files_read_multiple_files|local_files_list_directory|local_files_directory_tree|local_files_search_files|local_files_get_file_info|local_files_list_allowed_directories|local_files_create_file'
+# halp only exposes read, create-only and read-only SQL tools, skip llm-functions' confirm prompt for them
+export LLM_MCP_SKIP_CONFIRM='web_search_searxng_web_search|web_search_web_url_read|local_files_read_file|local_files_read_multiple_files|local_files_list_directory|local_files_directory_tree|local_files_search_files|local_files_get_file_info|local_files_list_allowed_directories|local_files_create_file|local_files_sqlite_schema|local_files_sqlite_query'
 
 set +e
 printf '%s\n' "$prompt" \

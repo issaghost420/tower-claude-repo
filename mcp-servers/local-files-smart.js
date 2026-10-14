@@ -15,10 +15,16 @@ import {
 import fs from "fs/promises";
 import path from "path";
 import sharp from "sharp";
+import os from "os";
+import { execFile } from "child_process";
+import { promisify } from "util";
 
 // --- Config ---
 const MAX_DIMENSION = 1024; // longest edge cap
 const JPEG_QUALITY = 85;
+const SQLITE_BIN = process.env.SQLITE3_BIN || "sqlite3";
+const SQLITE_MAX_DB_BYTES = 1024 * 1024 * 1024; // refuse to snapshot dbs over 1GB
+const SQLITE_MAX_OUTPUT_CHARS = 20000;
 const IMAGE_EXTENSIONS = new Set([
   ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".tiff", ".tif", ".avif",
 ]);
@@ -239,6 +245,83 @@ async function createFile(filePath, content) {
   };
 }
 
+// --- SQLite (read-only) ---
+// Queries run on a temp snapshot copy (db + -wal), never the original file:
+// apps like Firefox hold an exclusive lock on their dbs, and a copy can't be
+// used to modify the real one. sqlite3 also runs with -readonly and -safe
+// (-safe blocks .shell/.system, ATTACH, writefile(), load_extension, ...).
+async function withSqliteSnapshot(dbPath, fn) {
+  const resolved = await resolveAndValidate(dbPath);
+  const stat = await fs.stat(resolved);
+  if (!stat.isFile()) throw new Error(`${dbPath} is not a file`);
+  if (stat.size > SQLITE_MAX_DB_BYTES) {
+    throw new Error(`${dbPath} is ${Math.round(stat.size / 1e6)}MB, over the 1GB snapshot limit`);
+  }
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "lf-sqlite-"));
+  try {
+    const copy = path.join(dir, "db.sqlite");
+    await fs.copyFile(resolved, copy);
+    for (const ext of ["-wal", "-shm"]) {
+      try {
+        await fs.copyFile(resolved + ext, copy + ext);
+      } catch {}
+    }
+    return await fn(copy);
+  } finally {
+    await fs.rm(dir, { recursive: true, force: true });
+  }
+}
+
+async function runSqlite(dbCopy, sql) {
+  // A line starting with "." would be a sqlite3 CLI dot-command, never SQL
+  if (sql.split("\n").some((line) => line.trimStart().startsWith("."))) {
+    throw new Error("Dot-commands are not allowed, send plain SQL only");
+  }
+  const { stdout } = await promisify(execFile)(
+    SQLITE_BIN,
+    ["-readonly", "-safe", "-bail", "-json", dbCopy, sql],
+    { timeout: 20000, maxBuffer: 64 * 1024 * 1024 }
+  );
+  const trimmed = stdout.trim();
+  if (!trimmed) return [];
+  // -json prints one array per statement; keep the last one
+  const arrays = trimmed.split(/\n(?=\[)/);
+  return JSON.parse(arrays[arrays.length - 1]);
+}
+
+function formatRows(rows, maxRows) {
+  const cut = rows.slice(0, maxRows).map((row) =>
+    Object.fromEntries(
+      Object.entries(row).map(([k, v]) => [
+        k,
+        typeof v === "string" && v.length > 500 ? v.slice(0, 500) + "…" : v,
+      ])
+    )
+  );
+  let text = JSON.stringify(cut, null, 1);
+  if (text.length > SQLITE_MAX_OUTPUT_CHARS) {
+    text = text.slice(0, SQLITE_MAX_OUTPUT_CHARS) + "\n… (output truncated, add LIMIT or select fewer columns)";
+  }
+  const note =
+    rows.length > maxRows ? `${rows.length} rows, showing first ${maxRows}` : `${rows.length} rows`;
+  return { content: [{ type: "text", text: `${note}\n${text}` }] };
+}
+
+async function sqliteSchema(dbPath) {
+  return withSqliteSnapshot(dbPath, async (copy) => {
+    const rows = await runSqlite(
+      copy,
+      "SELECT type, name, sql FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY type, name;"
+    );
+    const text = rows.map((r) => `-- ${r.type} ${r.name}\n${r.sql};`).join("\n\n");
+    return { content: [{ type: "text", text: text || "No tables" }] };
+  });
+}
+
+async function sqliteQuery(dbPath, sql, maxRows = 200) {
+  return withSqliteSnapshot(dbPath, async (copy) => formatRows(await runSqlite(copy, sql), maxRows));
+}
+
 async function editFile(filePath, edits) {
   const resolved = await resolveAndValidate(filePath);
   let content = await fs.readFile(resolved, "utf-8");
@@ -388,6 +471,32 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       },
     },
     {
+      name: "sqlite_schema",
+      description:
+        "List the tables/views and their columns (CREATE statements) of a SQLite database file. Read-only, works on locked dbs (e.g. Firefox places.sqlite).",
+      inputSchema: {
+        type: "object",
+        properties: {
+          path: { type: "string", description: "Path to the .sqlite/.db file" },
+        },
+        required: ["path"],
+      },
+    },
+    {
+      name: "sqlite_query",
+      description:
+        "Run a read-only SQL query on a SQLite database file and get rows as JSON. Runs on a snapshot copy, so it can never modify the database. Use sqlite_schema first to see table names.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          path: { type: "string", description: "Path to the .sqlite/.db file" },
+          sql: { type: "string", description: "A SELECT query (plain SQL, no dot-commands)" },
+          max_rows: { type: "number", description: "Max rows to return (default 200)" },
+        },
+        required: ["path", "sql"],
+      },
+    },
+    {
       name: "get_file_info",
       description: "Get metadata about a file (size, dates, permissions).",
       inputSchema: {
@@ -444,6 +553,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return await moveFile(args.source, args.destination);
       case "search_files":
         return await searchFiles(args.path, args.pattern);
+      case "sqlite_schema":
+        return await sqliteSchema(args.path);
+      case "sqlite_query":
+        return await sqliteQuery(args.path, args.sql, args.max_rows || 200);
       case "get_file_info":
         return await getFileInfo(args.path);
       case "list_allowed_directories":

@@ -26,7 +26,8 @@ let
 
   mcpStart = pkgs.writeShellApplication {
     name = "halp-mcp-start";
-    runtimeInputs = with pkgs; [ argc jq curl nodejs_22 git coreutils gnugrep gnused ];
+    # sqlite: the bridge's local-files server shells out to sqlite3 for sqlite_query
+    runtimeInputs = with pkgs; [ argc jq curl nodejs_22 git coreutils gnugrep gnused sqlite ];
     text = ''
       export HALP_MCP_JSON="''${HALP_MCP_JSON:-${mcpJson}}"   # override to test other MCP servers
       export HALP_TOOL_GUARD=${toolGuard}

@@ -1,0 +1,15 @@
+[
+  {
+    "name": "sqlite_recover",
+    "description": "Recover a CORRUPTED SQLite database (only after sqlite_query 'PRAGMA integrity_check' returned something other than ok). Stops the service using it, recovers into a new file, verifies it, swaps it in, keeps the old db as a backup and restarts the service. The user must type yes in their terminal first; if they decline, nothing changes. Find the service from the system config (e.g. /etc/nixos) before calling.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "db": { "type": "string", "description": "Absolute path to the database file" },
+        "service": { "type": "string", "description": "systemd unit that has the db open, e.g. podman-pihole.service, or none if nothing uses it" },
+        "service_scope": { "type": "string", "description": "system (default) or user", "enum": ["system", "user"] }
+      },
+      "required": ["db", "service"]
+    }
+  }
+]

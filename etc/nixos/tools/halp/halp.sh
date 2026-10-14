@@ -120,9 +120,11 @@ export LLM_GUARD_MAX="${HALP_MAX_TOOLS:-12}"
 # halp only exposes read, create-only and read-only SQL tools, skip llm-functions' confirm prompt for them
 export LLM_MCP_SKIP_CONFIRM='web_search_searxng_web_search|web_search_web_url_read|local_files_read_file|local_files_read_multiple_files|local_files_list_directory|local_files_directory_tree|local_files_search_files|local_files_get_file_info|local_files_list_allowed_directories|local_files_create_file|local_files_sqlite_schema|local_files_sqlite_query'
 
+# --foreground: keep aichat in the terminal's process group, so tools that ask
+# on /dev/tty (sqlite_recover's "type yes", sudo) aren't stopped by SIGTTIN
 set +e
 printf '%s\n' "$prompt" \
-  | timeout "$TIMEOUT" aichat -r halp 2>"$errout" \
+  | timeout --foreground "$TIMEOUT" aichat -r halp 2>"$errout" \
   | sed '/<think>/,/<\/think>/d; /<think>/,$d' \
   | tee "$out"
 rc=${PIPESTATUS[1]}

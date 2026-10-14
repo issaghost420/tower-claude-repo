@@ -30,9 +30,16 @@ jq 'walk(if type == "object" and (.enum | type) == "array" and any(.enum[]; type
   functions.json > functions.json.tmp
 mv functions.json.tmp functions.json
 
+# Native (non-MCP) halp tools: declaration into functions.json, executable into bin/
+jq --slurpfile native "$HALP_NATIVE_TOOLS_JSON" \
+  '($native[0] | map(.name)) as $names | [.[] | select(.name as $n | $names | index($n) | not)] + $native[0]' \
+  functions.json > functions.json.tmp
+mv functions.json.tmp functions.json
+ln -sfn "$HALP_RECOVER_TOOL" bin/sqlite_recover
+
 # Route every MCP tool through the loop guard (argc rebuilds these symlinks on each start)
 jq -r '.[] | select(.mcp) | .name' functions.json | while read -r tool; do
   ln -sfn "$HALP_TOOL_GUARD" "bin/$tool"
 done
 
-echo "halp-mcp-start: bridge up, tools: $(jq -r '[.[] | select(.mcp) | .name] | join(" ")' functions.json)"
+echo "halp-mcp-start: bridge up, tools: $(jq -r '[.[].name] | join(" ")' functions.json)"
